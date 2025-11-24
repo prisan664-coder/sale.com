@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Admin Chat - FairPrice Online</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="shortcut icon"
+        href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ85l7fXjM5gRnEzD8xSyHh2vkXHCVN_HKS1Q&s"
+        type="image/x-icon">
+    <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ85l7fXjM5gRnEzD8xSyHh2vkXHCVN_HKS1Q&s"
+        type="image/x-icon">
+    <!-- Schema.org Organization Logo -->
+    <script type="application/ld+json">
+
+    </script>
+
+    <style>
+        #avatarPreview {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #444;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        #avatarPreview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        #messages {
+            height: 400px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .msg {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            align-items: flex-start;
+        }
+
+        .bubble {
+            background: #fff;
+            padding: 8px 12px;
+            border-radius: 12px;
+            max-width: 75%;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .meta {
+            font-size: 12px;
+            color: #6c757d;
+            margin-top: 4px;
+        }
+
+        .placeholderInitial {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 16px;
+            color: #fff;
+            background: #6c757d;
+        }
+
+        .edit-btn,
+        .delete-btn,
+        .reply-btn {
+            font-size: 10px;
+            padding: 2px 5px;
+            margin-left: 5px;
+        }
+
+        .reply-btn {
+            background-color: #0dcaf0;
+            border: 1px solid #0dcaf0;
+            color: #fff;
+        }
+
+        .reply-btn:hover {
+            background-color: #31d2f2;
+            border-color: #31d2f2;
+            color: #fff;
+        }
+    </style>
+</head>
+
+<body class="bg-light">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand text-primary fw-bold" href="index.html">FairPrice Online</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link btn btn-secondary text-white" href="index.html">Home page</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <h2 class="mb-4 text-primary">Admin Chat</h2>
+
+        <div class="d-flex align-items-center mb-3 gap-3">
+            <div id="avatarPreview" title="Avatar ของคุณ"></div>
+            <div class="flex-grow-1 d-flex gap-2" id="uploadRow">
+                <input type="text" class="form-control" id="avatarUrlInput" placeholder="Upload your URL profile">
+                <button class="btn btn-success" id="uploadBtn">Save URL</button>
+                <button class="btn btn-danger d-none" id="removeAvatarBtn">delete</button>
+            </div>
+        </div>
+
+        <div class="row g-2 mb-3">
+            <div class="col-md-4">
+                <input type="text" class="form-control" id="nameInput" placeholder="User name ( put here )">
+            </div>
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="messageInput" placeholder="Typing......">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100" onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+
+        <h5 class="text-secondary mb-2">Chat....</h5>
+        <div id="messages" class="mb-3"></div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+        import { getDatabase, ref as dbRef, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCLXIs8EaJNauHJpcnDMKU99C-uBKKR0aU",
+            authDomain: "my-bank-87108.firebaseapp.com",
+            databaseURL: "https://my-bank-87108-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "my-bank-87108",
+            storageBucket: "my-bank-87108.appspot.com",
+            messagingSenderId: "692654082797",
+            appId: "1:692654082797:web:3b5f9912900a8cb5409ae4",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        const avatarPreview = document.getElementById('avatarPreview');
+        const avatarUrlInput = document.getElementById('avatarUrlInput');
+        const uploadBtn = document.getElementById('uploadBtn');
+        const removeAvatarBtn = document.getElementById('removeAvatarBtn');
+        const messagesDiv = document.getElementById('messages');
+
+        const AVATAR_KEY = 'chat_avatar_url_bs5';
+        let currentAvatarUrl = localStorage.getItem(AVATAR_KEY) || null;
+
+        function renderAvatarPreview() {
+            avatarPreview.innerHTML = '';
+            if (currentAvatarUrl) {
+                const img = document.createElement('img'); img.src = currentAvatarUrl; avatarPreview.appendChild(img);
+                avatarUrlInput.classList.add('d-none'); uploadBtn.classList.add('d-none'); removeAvatarBtn.classList.remove('d-none');
+            } else {
+                const ph = document.createElement('div'); ph.className = 'placeholderInitial'; ph.textContent = 'U'; avatarPreview.appendChild(ph);
+                avatarUrlInput.classList.remove('d-none'); uploadBtn.classList.remove('d-none'); removeAvatarBtn.classList.add('d-none');
+            }
+        }
+        renderAvatarPreview();
+
+        uploadBtn.addEventListener('click', () => {
+            const url = avatarUrlInput.value.trim(); if (!url) { alert('กรุณาใส่ URL รูปก่อน'); return; }
+            currentAvatarUrl = url; localStorage.setItem(AVATAR_KEY, url); renderAvatarPreview();
+        });
+
+        removeAvatarBtn.addEventListener('click', () => {
+            if (!confirm('ต้องการลบรูปนี้หรือไม่?')) return;
+            currentAvatarUrl = null; localStorage.removeItem(AVATAR_KEY); renderAvatarPreview();
+        });
+
+        function addMessage(name, message) {
+            const messagesRef = dbRef(database, 'messages');
+            push(messagesRef, { name: name, text: message, timestamp: Date.now(), avatarUrl: currentAvatarUrl || null, edited: false });
+        }
+
+        window.sendMessage = function () {
+            const name = document.getElementById('nameInput').value.trim();
+            const msg = document.getElementById('messageInput').value.trim();
+            if (!name || !msg) { alert('กรุณาใส่ชื่อและข้อความ'); return; }
+            addMessage(name, msg);
+            document.getElementById('messageInput').value = '';
+        }
+
+        const messagesRef = dbRef(database, 'messages');
+        onValue(messagesRef, (snapshot) => {
+            const data = snapshot.val() || {};
+            messagesDiv.innerHTML = '';
+            const keys = Object.keys(data);
+            keys.sort((a, b) => (data[a].timestamp || 0) - (data[b].timestamp || 0));
+            for (const k of keys) {
+                const d = data[k];
+                const wrap = document.createElement('div'); wrap.className = 'msg align-items-start';
+
+                const avBox = document.createElement('div'); avBox.className = 'avatarBox';
+                const avDiv = document.createElement('div'); avDiv.style.width = '40px'; avDiv.style.height = '40px'; avDiv.style.borderRadius = '50%'; avDiv.style.overflow = 'hidden';
+                if (d.avatarUrl) {
+                    const img = document.createElement('img'); img.src = d.avatarUrl; img.style.width = '40px'; img.style.height = '40px'; img.style.objectFit = 'cover'; img.style.borderRadius = '50%'; avDiv.appendChild(img);
+                } else {
+                    const ph = document.createElement('div'); ph.className = 'placeholderInitial'; ph.style.width = '40px'; ph.style.height = '40px'; ph.style.borderRadius = '50%'; ph.style.display = 'flex';
+                    ph.style.alignItems = 'center'; ph.style.justifyContent = 'center'; ph.style.background = '#6c757d'; ph.style.color = '#fff'; ph.style.fontWeight = '700';
+                    const initial = (d.name && d.name[0]) ? d.name[0].toUpperCase() : '?'; ph.textContent = initial; avDiv.appendChild(ph);
+                }
+                avBox.appendChild(avDiv); wrap.appendChild(avBox);
+
+                const bubble = document.createElement('div'); bubble.className = 'bubble';
+                let textHtml = `<strong>${escapeHtml(d.name)}</strong><div class="mt-1">${escapeHtml(d.text)}</div>`;
+                textHtml += `<div class="meta">${new Date(d.timestamp).toLocaleString('th-TH')}`;
+                if (d.edited) textHtml += ' (แก้ไขแล้ว)';
+                textHtml += `</div>`;
+
+                const editBtn = document.createElement('button'); editBtn.className = 'btn btn-sm btn-warning edit-btn'; editBtn.textContent = 'แก้ไข';
+                editBtn.onclick = () => {
+                    const newText = prompt('แก้ไขข้อความ:', d.text);
+                    if (newText !== null) {
+                        update(dbRef(database, 'messages/' + k), { text: newText, edited: true, timestamp: Date.now() });
+                    }
+                };
+                const deleteBtn = document.createElement('button'); deleteBtn.className = 'btn btn-sm btn-danger delete-btn'; deleteBtn.textContent = 'ลบ';
+                deleteBtn.onclick = () => { if (confirm('ต้องการลบข้อความนี้หรือไม่?')) remove(dbRef(database, 'messages/' + k)); }
+
+                bubble.innerHTML = textHtml;
+                bubble.appendChild(editBtn);
+                bubble.appendChild(deleteBtn);
+
+                const replyBtn = document.createElement('button');
+                replyBtn.className = 'btn btn-sm reply-btn';
+                replyBtn.textContent = 'ตอบกลับ';
+                replyBtn.onclick = () => {
+                    const replyText = `ตอบกลับ: "${d.text}" → `;
+                    document.getElementById('messageInput').value = replyText;
+                    document.getElementById('messageInput').focus();
+                };
+                bubble.appendChild(replyBtn);
+
+                wrap.appendChild(bubble);
+                messagesDiv.appendChild(wrap);
+            }
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        });
+
+        function escapeHtml(str) { if (!str && str !== 0) return ''; return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;'); }
+
+        document.getElementById('nameInput').addEventListener('input', (e) => {
+            const v = e.target.value.trim();
+            if (!currentAvatarUrl) {
+                avatarPreview.innerHTML = ''; const ph = document.createElement('div'); ph.className = 'placeholderInitial'; ph.textContent = v ? v[0].toUpperCase() : 'U'; avatarPreview.appendChild(ph);
+            }
+        });
+
+        // กด Enter ส่งข้อความได้
+        document.getElementById('messageInput').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

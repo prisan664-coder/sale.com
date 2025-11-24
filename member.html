@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Members - FairPrice Online</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Favicon -->
+    <link rel="shortcut icon"
+        href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ85l7fXjM5gRnEzD8xSyHh2vkXHCVN_HKS1Q&s"
+        type="image/x-icon">
+    <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ85l7fXjM5gRnEzD8xSyHh2vkXHCVN_HKS1Q&s"
+        type="image/x-icon">
+    <!-- Schema.org Organization Logo -->
+    <script type="application/ld+json">
+
+    </script>
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+
+        .member-card {
+            margin-bottom: 15px;
+        }
+
+        canvas {
+            background: #fff;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .small-muted {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .member-actions button {
+            margin-left: 6px;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand text-primary fw-bold" href="index.html">FairPrice Online</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home/Online Market</a></li>
+                    <li class="nav-item"><a class="nav-link" href="admin-dashboard.html">........</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <h2 class="mb-4 text-primary">membersList</h2>
+
+        <!-- Form สมัครสมาชิก -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5> Quick sign-up and deposit available now. $10 free for all new members!</h5>
+                <input type="text" id="memberName" class="form-control mb-2" placeholder="Name and lastname">
+                <input type="email" id="memberEmail" class="form-control mb-2" placeholder="your email">
+                <select id="memberDeposit" class="form-select mb-2">
+                    <option value="">Choose you package</option>
+                    <option value="100">100$ → 2$/day</option>
+                    <option value="500">500$ → 5$/day</option>
+                    <option value="1000">1000$ → 10$/day</option>
+                    <option value="2000">2000$ → 20$/day</option>
+                    <option value="5000">5000$ → 50$/day</option>
+                    <option value="10000">10000$ → 100$/day</option>
+                    <option value="20000">20000$ → 300$/day</option>
+                    <option value="50000">50000$ → 1000$/day</option>
+                    <option value="100000">100000$ → 5000$/day</option>
+                </select>
+                <button id="registerMember" class="btn btn-success w-100">Buy</button>
+                <div class="small-muted mt-2">Please complete your deposit with the admin first, then return here to
+                    confirm the exact amount. For all withdrawals, you can notify the admin directly.</div>
+            </div>
+        </div>
+
+        <!-- แสดงสมาชิกทั้งหมด -->
+        <h4>Members name</h4>
+        <div id="membersList" class="mb-4"></div>
+
+        <!-- กราฟรายวัน Balance -->
+        <h4>Chart of Daily Balances (Currently displaying balances per person)</h4>
+        <canvas id="balanceChart" width="400" height="200"></canvas>
+    </div>
+
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+        import {
+            getDatabase,
+            ref,
+            push,
+            set,
+            onValue,
+            update,
+            remove
+        } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCLXIs8EaJNauHJpcnDMKU99C-uBKKR0aU",
+            authDomain: "my-bank-87108.firebaseapp.com",
+            databaseURL: "https://my-bank-87108-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "my-bank-87108",
+            storageBucket: "my-bank-87108.appspot.com",
+            messagingSenderId: "692654082797",
+            appId: "1:692654082797:web:3b5f9912900a8cb5409ae4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // กำหนด daily earning ตาม deposit
+        function getDailyEarning(deposit) {
+            const mapping = { 100: 2, 500: 5, 1000: 10, 2000: 20, 5000: 50, 10000: 100, 20000: 300, 50000: 1000, 100000: 5000 };
+            return mapping[deposit] || 0;
+        }
+
+        // ฟังก์ชันช่วย format วันที่เป็น YYYY-MM-DD HH:mm (local timezone)
+        function formatLocalDateTime(dt = new Date()) {
+            const y = dt.getFullYear();
+            const mo = String(dt.getMonth() + 1).padStart(2, '0');
+            const d = String(dt.getDate()).padStart(2, '0');
+            const hh = String(dt.getHours()).padStart(2, '0');
+            const mm = String(dt.getMinutes()).padStart(2, '0');
+            return `${y}-${mo}-${d} ${hh}:${mm}`;
+        }
+
+        // สมัครสมาชิก: สร้าง depositDate (format YYYY-MM-DD HH:mm) และเก็บ earningsHistory (key by date YYYY-MM-DD)
+        document.getElementById("registerMember").addEventListener("click", () => {
+            const name = document.getElementById("memberName").value.trim();
+            const email = document.getElementById("memberEmail").value.trim();
+            const deposit = parseInt(document.getElementById("memberDeposit").value);
+            if (!name || !email || !deposit) { alert("กรุณากรอกข้อมูลให้ครบ"); return; }
+
+            const dailyEarning = getDailyEarning(deposit);
+            const code = (Math.random().toString(36).substring(2, 8)).toUpperCase(); // รหัส 6 ตัว
+            const depositDate = formatLocalDateTime(new Date()); // YYYY-MM-DD HH:mm local
+            const membersRef = ref(db, 'members');
+            const newMemberRef = push(membersRef);
+
+            // เก็บ: depositDate (full local), earningsHistory key uses YYYY-MM-DD for date-only history
+            const todayKey = new Date().toISOString().split('T')[0];
+            set(newMemberRef, {
+                name,
+                email,
+                deposit,
+                dailyEarning,
+                balance: deposit,
+                joinDate: new Date().toISOString().split('T')[0],
+                code,
+                depositDate, // <-- เพิ่ม timestamp
+                earningsHistory: { [todayKey]: dailyEarning }
+            }).then(() => {
+                alert(`สมัครสมาชิกสำเร็จ!\nรหัสเข้าสู่ระบบของคุณ: ${code}\nฝากเมื่อ: ${depositDate}`);
+                // ล้างฟอร์มเล็กน้อย
+                document.getElementById("memberName").value = '';
+                document.getElementById("memberEmail").value = '';
+                document.getElementById("memberDeposit").value = '';
+            }).catch(err => {
+                console.error(err);
+                alert('เกิดข้อผิดพลาดในการสมัครสมาชิก');
+            });
+        });
+
+        // แสดงสมาชิก + เก็บข้อมูล earningsHistory
+        const membersContainer = document.getElementById("membersList");
+        let membersData = {}; // เก็บ object สำหรับกราฟ โดย key = memberId เพื่อความชัดเจน
+        const membersNameById = {}; // เก็บชื่อเพื่อแสดง label
+
+        onValue(ref(db, 'members'), snapshot => {
+            const data = snapshot.val() || {};
+            membersContainer.innerHTML = '';
+            membersData = {};
+            // reset helper map
+            for (const id in data) {
+                const m = data[id];
+                // เก็บข้อมูลที่จำเป็น (balance + history)
+                membersData[id] = {
+                    name: m.name || `#${id.substring(0, 6)}`,
+                    balance: m.balance || 0,
+                    dailyEarning: m.dailyEarning || 0,
+                    history: m.earningsHistory || {},
+                    depositDate: m.depositDate || ''
+                };
+                membersNameById[id] = m.name || `#${id.substring(0, 6)}`;
+
+                // สร้าง card แสดงข้อมูล พร้อม depositDate ใต้ deposit
+                const div = document.createElement('div');
+                div.className = 'card member-card p-2';
+                div.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-start">
+                      <div>
+                        <h5 class="mb-1">${m.name}</h5>
+                        <div>Deposit: $${m.deposit}</div>
+                        <div class="small-muted">Deposit date: ${m.depositDate || '-'}</div>
+                        <div>Balance: $${m.balance}</div>
+                        <div>Daily: $${m.dailyEarning}</div>
+                      </div>
+                      <div class="text-end small-muted">
+                        Joined: ${m.joinDate || '-'}<br>
+                        Code: ${m.code || '-'}<br>
+                        <div class="member-actions mt-2">
+                          <button class="btn btn-sm btn-outline-primary" onclick="editBalance('${id}', ${m.balance})">edit Balance</button>
+                          <button class="btn btn-sm btn-outline-danger" onclick="deleteMember('${id}', '${m.name}')">delete</button>
+                        </div>
+                      </div>
+                    </div>
+                `;
+                membersContainer.appendChild(div);
+            }
+            updateChart();
+        });
+
+        // ฟังก์ชันลบ member (ลบทั้ง node ตามที่ request: X)
+        window.deleteMember = function (memberId, memberName) {
+            if (!memberId) return;
+            const ok = confirm(`ยืนยันลบสมาชิก "${memberName}" ?\n(การลบจะลบข้อมูลทั้งหมด รวม earningsHistory)`);
+            if (!ok) return;
+            remove(ref(db, `members/${memberId}`))
+                .then(() => {
+                    alert('ลบสมาชิกเรียบร้อยแล้ว');
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('เกิดข้อผิดพลาดขณะลบสมาชิก');
+                });
+        };
+
+        // ฟังก์ชันแก้ไข balance แบบ M1 (ใส่ตัวเลขใหม่)
+        window.editBalance = function (memberId, currentBalance) {
+            if (!memberId) return;
+            const input = prompt('กรอก Balance ใหม่ (ตัวเลขเท่านั้น)', String(currentBalance));
+            if (input === null) return; // cancel
+            const newBalance = parseFloat(input);
+            if (isNaN(newBalance)) {
+                alert('จำนวนไม่ถูกต้อง');
+                return;
+            }
+            // อัปเดต balance node
+            update(ref(db, `members/${memberId}`), { balance: newBalance })
+                .then(() => {
+                    alert('อัปเดต Balance เรียบร้อยแล้ว');
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert('เกิดข้อผิดพลาดขณะอัปเดต Balance');
+                });
+        };
+
+        // กราฟ Balance (แสดง Balance ปัจจุบันของแต่ละ member)
+        const ctx = document.getElementById('balanceChart').getContext('2d');
+        let balanceChart = new Chart(ctx, {
+            type: 'bar',
+            data: { labels: [], datasets: [{ label: 'Balance', data: [], backgroundColor: 'rgba(13,110,253,0.5)', borderColor: 'rgba(13,110,253,1)', borderWidth: 1 }] },
+            options: { responsive: true, scales: { y: { beginAtZero: true } } }
+        });
+
+        function updateChart() {
+            const labels = [];
+            const data = [];
+            for (const id in membersData) {
+                labels.push(membersData[id].name);
+                data.push(membersData[id].balance || 0);
+            }
+            balanceChart.data.labels = labels;
+            balanceChart.data.datasets[0].data = data;
+            balanceChart.update();
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

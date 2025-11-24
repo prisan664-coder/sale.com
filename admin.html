@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="th">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Fuji Mobile Shop</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Favicon -->
+    <link rel="shortcut icon"
+        href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ85l7fXjM5gRnEzD8xSyHh2vkXHCVN_HKS1Q&s"
+        type="image/x-icon">
+    <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ85l7fXjM5gRnEzD8xSyHh2vkXHCVN_HKS1Q&s"
+        type="image/x-icon">
+    <!-- Schema.org Organization Logo -->
+    <script type="application/ld+json">
+
+    </script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .login-container {
+            max-width: 400px;
+            margin-top: 80px;
+        }
+
+        .login-card {
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            background-color: #fff;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container login-container">
+        <div class="login-card">
+            <h3 class="text-center text-primary mb-4">Admin Login</h3>
+            <form id="loginForm">
+                <div class="mb-3">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" class="form-control" id="email" required placeholder="admin@example.com">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">password</label>
+                    <input type="password" class="form-control" id="password" required placeholder="password">
+                </div>
+                <button type="submit" class="btn btn-primary w-100">Login now</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // กำหนดอีเมลและรหัสผ่านแอดมินที่อนุญาต
+        const allowedAdmins = [
+            { email: "admin@fujimobile.com", password: "123456" }
+            // เพิ่มแอดมินอื่นได้ที่นี่
+        ];
+
+        document.getElementById('loginForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            const admin = allowedAdmins.find(a => a.email === email && a.password === password);
+            if (admin) {
+                sessionStorage.setItem('adminLogged', 'true');
+                sessionStorage.setItem('adminEmail', email);
+                alert('เข้าสู่ระบบสำเร็จ!');
+                window.location.href = 'admin-dashboard.html';
+            } else {
+                alert('อีเมลหรือรหัสผ่านไม่ถูกต้อง');
+            }
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
