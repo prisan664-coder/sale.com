@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard (Orders)</title>
+
+    <link rel="shortcut icon"
+        href="https://scontent.fvte1-1.fna.fbcdn.net/v/t39.30808-6/518825433_122117695760900284_354744809560286503_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=ldLnZ0tvy08Q7kNvwF7Ekl4&_nc_oc=AdlK_DvJpcucNDU2Pdijw4813aGABLoY7ukxzNCEhUUr9pakpwxVacXzJ08x8kQOfjg&_nc_zt=23&_nc_ht=scontent.fvte1-1.fna&_nc_gid=KGJcV5nwnpkb1syQENv5mQ&oh=00_AfjzcdNWomaPDeeWsmN0eF0-HLhLzbRNM8xBxCv2OuroFQ&oe=692D81D6"
+        type="image/x-icon">
+    <link rel="icon"
+        href="https://scontent.fvte1-1.fna.fbcdn.net/v/t39.30808-6/518825433_122117695760900284_354744809560286503_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=ldLnZ0tvy08Q7kNvwF7Ekl4&_nc_oc=AdlK_DvJpcucNDU2Pdijw4813aGABLoY7ukxzNCEhUUr9pakpwxVacXzJ08x8kQOfjg&_nc_zt=23&_nc_ht=scontent.fvte1-1.fna&_nc_gid=KGJcV5nwnpkb1syQENv5mQ&oh=00_AfjzcdNWomaPDeeWsmN0eF0-HLhLzbRNM8xBxCv2OuroFQ&oe=692D81D6"
+        type="image/x-icon">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+        }
+
+        .order-card {
+            margin-bottom: 20px;
+            border-left: 5px solid #0d6efd;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .order-card:hover {
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .order-id {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .customer-info-box {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .status-badge {
+            font-size: 0.9rem;
+            padding: 5px 10px;
+            border-radius: 5px;
+        }
+
+        .status-New {
+            background-color: #ffc107;
+            color: #343a40;
+        }
+
+        /* Warning */
+        .status-Processing {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        /* Info */
+        .status-Shipped {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+        /* Primary */
+        .status-Delivered {
+            background-color: #28a745;
+            color: white;
+        }
+
+        /* Success */
+
+        .status-dropdown {
+            width: 150px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand text-primary fw-bold" href="Admin2.html">⚙️ Admin Dashboard (Orders)</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home (Customer View)</a></li>
+                    <li class="nav-item"><a class="nav-link" href="admin-dashboard.html">Back to Admin</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-4">
+        <h2 class="mb-4 text-primary">ລາຍການຄຳສັ່ງຊື້ສິນຄ້າທັງໝົດ</h2>
+        <div id="orders-list">
+            <div class="text-center p-5" id="loading-message">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">ກຳລັງໂຫຼດລາຍການຄຳສັ່ງຊື້...</p>
+            </div>
+        </div>
+        <div id="no-orders-message" class="alert alert-info" style="display: none;">
+            ຍັງບໍ່ມີລາຍການຄຳສັ່ງຊື້.
+        </div>
+    </div>
+
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
+        // Import update สำหรับการอัปเดตสถานะ และ remove สำหรับการลบ
+        import { getDatabase, ref as dbRef, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCLXIs8EaJNauHJpcnDMKU99C-uBKKR0aU",
+            authDomain: "my-bank-87108.firebaseapp.com",
+            databaseURL: "https://my-bank-87108-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "my-bank-87108",
+            storageBucket: "my-bank-87108.appspot.com",
+            messagingSenderId: "692654082797",
+            appId: "1:692654082797:web:3b5f9912900a8cb5409ae4"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+        const ordersRef = dbRef(db, 'orders');
+
+        const ordersList = document.getElementById('orders-list');
+        const loadingMessage = document.getElementById('loading-message');
+        const noOrdersMessage = document.getElementById('no-orders-message');
+
+        // สถานะคำสั่งซื้อที่เป็นไปได้
+        const orderStatuses = ['New Order', 'Processing', 'Shipped', 'Delivered'];
+
+        // ** 1. ฟังก์ชันอัปเดตสถานะคำสั่งซื้อ **
+        window.updateOrderStatus = (orderId, newStatus) => {
+            if (confirm(`ທ່ານຕ້ອງການປ່ຽນສະຖານະຄຳສັ່ງຊື້ ${orderId} ເປັນ: ${newStatus} ແມ່ນບໍ່?`)) {
+                const updateData = {
+                    status: newStatus
+                };
+                update(dbRef(db, 'orders/' + orderId), updateData)
+                    .then(() => {
+                        alert('ອັບເດດສະຖານະສຳເລັດ!');
+                    })
+                    .catch((error) => {
+                        console.error("Error updating status: ", error);
+                        alert("ເກີດຂໍ້ຜິດພາດໃນການອັບເດດສະຖານະ.");
+                    });
+            }
+        };
+
+        // ** 2. ฟังก์ชันลบคำสั่งซื้อ **
+        window.deleteOrder = (orderId) => {
+            if (confirm(`ທ່ານຕ້ອງການລຶບຄຳສັ່ງຊື້ ${orderId} ອອກຈາກລະບົບຢ່າງຖາວອນແມ່ນບໍ່?`)) {
+                remove(dbRef(db, 'orders/' + orderId))
+                    .then(() => {
+                        alert('ລຶບຄຳສັ່ງຊື້ສຳເລັດ!');
+                    })
+                    .catch((error) => {
+                        console.error("Error deleting order: ", error);
+                        alert("ເກີດຂໍ້ຜິດພາດໃນການລຶບຄຳສັ່ງຊື້.");
+                    });
+            }
+        };
+
+        // ** 3. โหลดและแสดงรายการคำสั่งซื้อ **
+        onValue(ordersRef, (snapshot) => {
+            const ordersData = snapshot.val() || {};
+            const orderKeys = Object.keys(ordersData).reverse(); // เรียงลำดับคำสั่งซื้อล่าสุดขึ้นก่อน
+
+            ordersList.innerHTML = '';
+            loadingMessage.style.display = 'none';
+
+            if (orderKeys.length === 0) {
+                noOrdersMessage.style.display = 'block';
+                return;
+            }
+            noOrdersMessage.style.display = 'none';
+
+
+            orderKeys.forEach(orderId => {
+                const order = ordersData[orderId];
+
+                // แปลงรายการสินค้าให้อยู่ในรูปแบบ HTML List
+                const itemsHtml = order.items.map(item => {
+                    const price = parseFloat(item.price.replace(' dollars', ''));
+                    return `<li class="list-group-item d-flex justify-content-between">
+                                <div>${item.name} <span class="badge bg-secondary rounded-pill">x${item.quantity}</span></div>
+                                <span class="fw-bold">${(price * item.quantity).toFixed(2)} dollars</span>
+                            </li>`;
+                }).join('');
+
+                // สร้างตัวเลือกสำหรับอัปเดตสถานะ
+                const statusOptions = orderStatuses.map(status => {
+                    const isSelected = status === order.status ? 'selected' : '';
+                    return `<option value="${status}" ${isSelected}>${status}</option>`;
+                }).join('');
+
+                const orderCard = document.createElement('div');
+                orderCard.className = 'card order-card';
+                orderCard.innerHTML = `
+                    <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0 text-primary">Order ID: <span class="order-id fw-normal">${orderId}</span></h5>
+                        <span class="status-badge status-${order.status.replace(/\s/g, '')}">${order.status}</span>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6 class="text-secondary">ຂໍ້ມູນລູກຄ້າ</h6>
+                                <div class="customer-info-box">
+                                    <p class="mb-1"><strong>ຊື່:</strong> ${order.customer.fullName}</p>
+                                    <p class="mb-1"><strong>ເບີໂທ:</strong> ${order.customer.phoneNumber}</p>
+                                    <p class="mb-1"><strong>Whatsapp:</strong> ${order.customer.whatsappNumber || '-'}</p>
+                                    <p class="mb-1"><strong>ທີ່ຢູ່:</strong> ${order.customer.currentAddress}, ${order.customer.city}, ${order.customer.province}</p>
+                                    <p class="mb-1"><strong>ສາຂາຝາກເຄື່ອງ:</strong> ${order.customer.nearbyBranch || '-'}</p>
+                                </div>
+                                <p class="mb-1 order-id"><strong>ວັນທີ່ສັ່ງຊື້:</strong> ${new Date(order.orderDate).toLocaleString()}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <h6 class="text-secondary d-flex justify-content-between">
+                                    <span>ລາຍການສິນຄ້າ</span>
+                                    <span class="fw-bold text-danger">ລວມ: ${order.total} dollars</span>
+                                </h6>
+                                <ul class="list-group list-group-flush mb-3">
+                                    ${itemsHtml}
+                                </ul>
+                                
+                                <h6 class="text-secondary">ຈັດການສະຖານະ</h6>
+                                <div class="d-flex align-items-center gap-2">
+                                    <select class="form-select status-dropdown" 
+                                            onchange="updateOrderStatus('${orderId}', this.value)">
+                                        ${statusOptions}
+                                    </select>
+                                    <button class="btn btn-sm btn-danger" onclick="deleteOrder('${orderId}')">
+                                        ລຶບ
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                ordersList.appendChild(orderCard);
+            });
+        });
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
