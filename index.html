@@ -201,7 +201,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Admin2.html">For Admin (New)</a></li>
+                    <li class="nav-item"><a class="nav-link" href="admin.html">For Admin Only</a></li>
 
                     <li class="nav-item">
                         <button class="btn btn-outline-primary cart-icon-btn" data-bs-toggle="modal"
@@ -508,7 +508,7 @@
 
             // คำนวณยอดรวม
             let total = cart.reduce((sum, item) => {
-                const price = parseFloat(item.price.replace(' dollars', ''));
+                const price = parseFloat(item.price.replace(' kip', ''));
                 return sum + (price * item.quantity);
             }, 0);
 
@@ -533,7 +533,7 @@
                 customerInfoModal.hide();
 
                 // แจ้งเตือนลูกค้า
-                alert(`ສັ່ງຊື້ສິນຄ້າສຳເລັດແລ້ວ! ຂໍຂອບໃຈທ່ານ ${customerInfo.fullName} \nເລກທີຄຳສັ່ງຊື້: ${newOrderRef.key}\nລາຍການທັງໝົດ: ${orderData.total} dollars.\nແອັດມິນຈະຕິດຕໍ່ກັບທ່ານໄວໆນີ້.\n\nກະລຸນາໄປທີ່ Admin2.html ເພື່ອເບິ່ງລາຍການສັ່ງຊື້.`);
+                alert(`ສັ່ງຊື້ສິນຄ້າສຳເລັດແລ້ວ! ຂໍຂອບໃຈທ່ານ ${customerInfo.fullName} \nເລກທີຄຳສັ່ງຊື້: ${newOrderRef.key}\nລາຍການທັງໝົດ: ${orderData.total} kip.\nແອັດມິນຈະຕິດຕໍ່ກັບທ່ານໄວໆນີ້.\n\nກະລຸນາໄປທີ່ Admin2.html ເພື່ອເບິ່ງລາຍການສັ່ງຊື້.`);
                 trackEvent('order_placed', { orderId: newOrderRef.key, total: total });
 
                 // ไม่ได้เปลี่ยนหน้า แต่แจ้งให้แอดมินไปหน้า Admin2.html
@@ -566,7 +566,7 @@
                 emptyCartMessage.style.display = 'none';
                 checkoutBtn.disabled = false; // เปิดปุ่มสั่งซื้อ
                 cart.forEach((item, index) => {
-                    const price = parseFloat(item.price.replace(' dollars', ''));
+                    const price = parseFloat(item.price.replace(' kip', ''));
                     total += price * item.quantity;
 
                     const li = document.createElement('li');
@@ -574,7 +574,7 @@
                     li.innerHTML = `
                         <div class="item-details">
                             <h6 class="mb-1">${item.name}</h6>
-                            <small>${price.toFixed(2)} dollars x ${item.quantity}</small>
+                            <small>${price.toFixed(2)} kip x ${item.quantity}</small>
                         </div>
                         <div class="item-actions">
                             <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${index}, 1)">+</button>
@@ -586,7 +586,7 @@
                 });
             }
 
-            cartTotalElement.textContent = total.toFixed(2) + ' dollars';
+            cartTotalElement.textContent = total.toFixed(2) + ' kip';
             localStorage.setItem('fuji_mobile_cart', JSON.stringify(cart)); // บันทึกตะกร้าลง LocalStorage
         }
 
@@ -662,7 +662,7 @@
                             <img src="${p.imageUrl}" class="card-img-top" alt="${p.name}">
                             <div class="card-body">
                                 <h5 class="card-title">${p.name}</h5>
-                                <p class="card-text price">${p.price} dollars</p>
+                                <p class="card-text price">${p.price} ກີບ</p>
                                 <p class="card-text muted">${p.description || ''}</p>
                                 <p class="countdown" data-product-key="${category}-${key}">Loading timer...</p>
                                 <div class="d-flex justify-content-between align-items-center mt-2">
