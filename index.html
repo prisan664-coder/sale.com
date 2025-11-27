@@ -4,16 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FairPrice Online</title>
+    <title>Fuji Mobile repair online Service</title>
 
-    <!-- Favicon -->
     <link rel="shortcut icon"
-        href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ85l7fXjM5gRnEzD8xSyHh2vkXHCVN_HKS1Q&s"
+        href="https://scontent.fvte1-1.fna.fbcdn.net/v/t39.30808-6/518825433_122117695760900284_354744809560286503_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=ldLnZ0tvy08Q7kNvwF7Ekl4&_nc_oc=AdlK_DvJpcucNDU2Pdijw4813aGABLoY7ukxzNCEhUUr9pakpwxVacXzJ08x8kQOfjg&_nc_zt=23&_nc_ht=scontent.fvte1-1.fna&_nc_gid=KGJcV5nwnpkb1syQENv5mQ&oh=00_AfjzcdNWomaPDeeWsmN0eF0-HLhLzbRNM8xBxCv2OuroFQ&oe=692D81D6"
         type="image/x-icon">
-    <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ85l7fXjM5gRnEzD8xSyHh2vkXHCVN_HKS1Q&s"
+    <link rel="icon"
+        href="https://scontent.fvte1-1.fna.fbcdn.net/v/t39.30808-6/518825433_122117695760900284_354744809560286503_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=ldLnZ0tvy08Q7kNvwF7Ekl4&_nc_oc=AdlK_DvJpcucNDU2Pdijw4813aGABLoY7ukxzNCEhUUr9pakpwxVacXzJ08x8kQOfjg&_nc_zt=23&_nc_ht=scontent.fvte1-1.fna&_nc_gid=KGJcV5nwnpkb1syQENv5mQ&oh=00_AfjzcdNWomaPDeeWsmN0eF0-HLhLzbRNM8xBxCv2OuroFQ&oe=692D81D6"
         type="image/x-icon">
 
-    <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <style>
@@ -118,6 +117,74 @@
             font-weight: bold;
             color: #dc3545;
         }
+
+        /* ************************************** */
+        /* ** ส่วนที่เพิ่มสำหรับตะกร้าสินค้า ** */
+        /* ************************************** */
+
+        .cart-icon-btn {
+            position: relative;
+            /* เพื่อให้ badge ตำแหน่งถูก */
+            margin-left: 10px;
+        }
+
+        .cart-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            padding: 2px 6px;
+            border-radius: 50%;
+            background-color: #dc3545;
+            /* สีแดง */
+            color: white;
+            font-size: 0.7em;
+            font-weight: bold;
+        }
+
+        /* Modal สำหรับตะกร้าสินค้า */
+        #cartModal .modal-dialog {
+            max-width: 600px;
+        }
+
+        #cartItems .list-group-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .item-details {
+            flex-grow: 1;
+        }
+
+        .item-details small {
+            display: block;
+            color: #6c757d;
+        }
+
+        .item-actions button {
+            margin-left: 10px;
+        }
+
+        /* Modal สำหรับกรอกข้อมูลลูกค้า */
+        #customerInfoModal .modal-dialog {
+            max-width: 500px;
+        }
+
+        #customerInfoDisplay {
+            padding: 15px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background-color: #f8f9fa;
+        }
+
+        #customerInfoDisplay h6 {
+            color: #0d6efd;
+            font-weight: bold;
+            border-bottom: 1px dashed #ced4da;
+            padding-bottom: 5px;
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 
@@ -125,16 +192,28 @@
 
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
         <div class="container">
-            <a class="navbar-brand text-primary fw-bold" href="index.html">FairPrice Online the big market in
-                Singapore</a>
+            <a class="navbar-brand text-primary fw-bold" href="index.html">ເວັບຂາຍໂທລະສັບມື 1 ແລະ 2
+                ທີປອດໄພທີສຸດໃນລາວ</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link" href="index.html">FairPrice Online website</a></li>
-                    <li class="nav-item"><a class="nav-link" href="admin-dashboard.html">😍😍😍</a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="Admin2.html">For Admin (New)</a></li>
+
+                    <li class="nav-item">
+                        <button class="btn btn-outline-primary cart-icon-btn" data-bs-toggle="modal"
+                            data-bs-target="#cartModal">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-cart" viewBox="0 0 16 16">
+                                <path
+                                    d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                            </svg>
+                            <span class="cart-badge" id="cart-count">0</span>
+                        </button>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -142,8 +221,8 @@
 
     <div class="container py-4">
         <h2 class="mb-4 text-primary d-flex align-items-center justify-content-between">
-            Welcome to FairPrice Online
-            <a href="member.html" class="btn btn-warning btn-sm">Members</a>
+            ບໍລິການສ້ອມແປງແລະປົດລ໊ອດອອນລາຍທົ່ວປະເທດລາວ
+            <a href="#" class="btn btn-warning btn-sm">Members</a>
         </h2>
 
         <div id="carouselExample" class="carousel slide mb-4">
@@ -162,19 +241,19 @@
             <a href="Firebase.html">Admin center / Click here</a>
         </div>
 
-        <h4>Flash deals</h4>
+        <h4>ໂທລະສັບໄອໂຟນສະເພາະມື 1</h4>
         <div class="row mb-4" id="cases-row"></div>
 
         <h4>Best Seller ⭐</h4>
         <div class="row mb-4" id="best-seller-row"></div>
 
-        <h4>Recommended for you</h4>
+        <h4>ໂທລະສັບແອນດລອຍມື 1</h4>
         <div class="row mb-4" id="cables-row"></div>
 
-        <h4>What's hot now</h4>
+        <h4>ໂທລະສັບມືສອງ</h4>
         <div class="row mb-4" id="phones-row"></div>
 
-        <h4>Price drop buy now</h4>
+        <h4>ສິນຄ້າທົ່ວໄປ</h4>
         <div class="row mb-4" id="welcome-products-row"></div>
 
         <footer class="py-3 text-center">
@@ -182,9 +261,118 @@
         </footer>
     </div>
 
+    <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cartModalLabel">🛒ກະຕ່າສັ່ງຊື້ສິນຄ້າຫລັງສົ່ງລາຍການແລ້ວແອດມີນຈະທັກຫາ</h5>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <style>
+                    .center {
+                        text-align: center;
+                    }
+                </style>
+
+                <h7 class="center">
+                    ທຸກຄັ້ງໃຫ້ຊຳລະກັບແອດມິນເທົ່ານັ້ນ ນອກຈາກລາຍກັນທີເກັບເງິນປາຍທາງ <br> ເມື່ອທ່ານກດສັ່ງຊື້ແລ້ວຈະມີແອດມິນທັກຫາທາງ Whatsapp
+                </h7>
+
+                <div class="modal-body">
+                    <ul class="list-group" id="cartItems">
+                    </ul>
+                    <div id="emptyCartMessage" class="alert alert-info mt-3" style="display:none;">
+                        ຍັງບໍ່ມີລາຍການຄຳສັ່ງຊື້
+                    </div>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <div class="fw-bold">
+                        ລາຄາລວມທັ້ງຫມົດ: <span id="cartTotal">0.00 ກີບ</span>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-sm btn-outline-danger"
+                            id="clearCartBtn">ລ້າງກະຕ່າສິນຄ້າໃຫມ່</button>
+                        <button type="button" class="btn btn-sm btn-success" id="checkoutBtn">ສັ່ງຊື້ເລີຍ</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="customerInfoModal" tabindex="-1" aria-labelledby="customerInfoModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="customerInfoModalLabel">📝ຂໍ້ມູມສຳລັບຈັດສົ່ງ ກະລຸນາປ້ອນຂໍ້ມູມທີຖືກຕ້ອງ</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="customerInfoDisplay" style="display: none;">
+                        <h6>ຂໍ້ມູມທີລູກຄ້າບັນທຶກໄວ້:</h6>
+                        <p class="mb-1">**ຊື່ແລະນາມສະກຸມ:** <span id="display-name"></span>
+                            <button class="btn btn-link btn-sm p-0 ms-2" onclick="editCustomerInfo()">(แก้ไข)</button>
+                        </p>
+                        <p class="mb-1">**ເບີໂທ:** <span id="display-phone"></span></p>
+                        <p class="mb-1">**ເບີ Whatsapp:** <span id="display-whatsapp"></span></p>
+                        <p class="mb-1">**ທີ່ຢູ່:** <span id="display-address"></span>, <span id="display-city"></span>,
+                            <span id="display-province"></span>
+                        </p>
+                        <p class="mb-1">**ສາຂາຝາກເຄື່ອງ:** <span id="display-branch"></span></p>
+                    </div>
+
+                    <form id="customerInfoForm">
+                        <div class="mb-3">
+                            <label for="fullName" class="form-label">ຊື່ແລະນາມສະກຸມ</label>
+                            <input type="text" class="form-control" id="fullName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="phoneNumber" class="form-label">ເບີໂທ</label>
+                            <input type="tel" class="form-control" id="phoneNumber" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="whatsappNumber" class="form-label">ເບີ Whatsapp</label>
+                            <input type="tel" class="form-control" id="whatsappNumber">
+                        </div>
+                        <div class="mb-3">
+                            <label for="currentAddress" class="form-label">ບ້ານຢູ່ປັດຈຸບັນ</label>
+                            <input type="text" class="form-control" id="currentAddress" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="city" class="form-label">ເມືອງ</label>
+                            <input type="text" class="form-control" id="city" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="province" class="form-label">ແຂວງ</label>
+                            <input type="text" class="form-control" id="province" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="nearbyBranch" class="form-label">ສາຂາຝາກເຄື່ອງທີໃກ້ຄຽງ</label>
+                            <input type="text" class="form-control" id="nearbyBranch">
+                        </div>
+                        <button type="submit" class="btn btn-primary w-100" id="saveInfoBtn">ກົດບັນທຶກລາຍການ</button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-lg btn-success w-100" id="finalOrderBtn"
+                        style="display: none;">
+                        ກົດສັ່ງຊື້ສິນຄ້າ
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-        import { getDatabase, ref as dbRef, onValue, push } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+        // Import update และ set สำหรับการอัปเดตหรือกำหนดข้อมูล
+        import { getDatabase, ref as dbRef, onValue, push, set } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+
+        // *******************************************************************
+        // ** ส่วนแก้ไขและเพิ่มเติม JavaScript **
+        // *******************************************************************
 
         const firebaseConfig = {
             apiKey: "AIzaSyCLXIs8EaJNauHJpcnDMKU99C-uBKKR0aU",
@@ -200,10 +388,14 @@
         const db = getDatabase(app);
 
         const carouselImages = [
-            "https://www.fairprice.com.sg/wp-content/uploads/2022/03/FP-Digital-Club-KV-mobile-v4.jpg",
-            "https://assets-eu-01.kc-usercontent.com/44bc0180-e274-014f-6b99-e5fc8ab7f759/2e7a3184-5a8b-4c58-a1f4-7d4e1a5e4131/Happy%20MarketerXFairprice_October%202019.jpg",
-            "https://alep-p-001.sitecorecontenthub.cloud//api/public/content/33ff509ddf804cda803e8c3d071629df?v=3a5f5957",
-            "https://www.fairpricegroup.com.sg/wp-content/uploads/2024/09/masthead-sub-our-people.jpg"
+            "https://scontent.fvte5-1.fna.fbcdn.net/v/t39.30808-6/511156933_122112403952900284_7445255279904740194_n.png?_nc_cat=110&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=dqIsIg3JU-AQ7kNvwHDabd5&_nc_oc=AdknckkR7d8VB8kymWbig6nyfJ9WThM2DHCvGb5AFO2IHXQT4oHbeYBTeXqHfv8083M&_nc_zt=23&_nc_ht=scontent.fvte5-1.fna&_nc_gid=ipQMxHoN1Nc5I7zWth788Q&oh=00_AfgwsEACDbRIOzTP3cLP_hBVdU7MaJxsxkJ2WBcnJWvsBA&oe=692D612E",
+            "https://scontent.fvte5-1.fna.fbcdn.net/v/t39.30808-6/514646010_4097229920536732_2439041800811875889_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=86c6b0&_nc_ohc=DHk7zIKZKycQ7kNvwEmXIMX&_nc_oc=AdndqZDUeLTIdjANUefV749Xq-kIlXeIVlT-hCwJnHkbz_Cz1XOTod9sG9cVVzVy4mY&_nc_zt=23&_nc_ht=scontent.fvte5-1.fna&_nc_gid=Ppz09sNre_LEOJBR7dfPEg&oh=00_Afji0Kf5Y4qK8imxfiBQgm7J_6Hv7yAqSXDO9gQbgcYqxQ&oe=692D7DE3",
+            "https://scontent.fvte3-1.fna.fbcdn.net/v/t39.30808-6/585893796_122141379200900284_6328156473185626830_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=105&ccb=1-7&_nc_sid=833d8c&_nc_ohc=pjzVAqj1GCoQ7kNvwGcCGB4&_nc_oc=Adm2f8ohxpavLP3eYDH2ggaBZ0GPcaAOp089NGU6Ee2Bv1Ms5qIN37gSNhZTjgTfagw&_nc_zt=23&_nc_ht=scontent.fvte3-1.fna&_nc_gid=j-FWVlCn-TmYuMw_-IwSKA&oh=00_AfhMZtUWxxrhk0QMyi11_0Ac-iIL5X0r2pvKLBxZ6CXMFQ&oe=692D8299",
+            "https://scontent.fvte1-2.fna.fbcdn.net/v/t39.30808-6/570344439_122137026026900284_7647926302248433610_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=FBXP_MK3Mv4Q7kNvwF3Hz_q&_nc_oc=Admxy-raEUMgnrXcYYBl_mwmxDAA2ulb6aMACTFbuUTtfiw0-NAlcUl-xvSxvg1p6qM&_nc_zt=23&_nc_ht=scontent.fvte1-2.fna&_nc_gid=T8QRpFKKcBzztABBT-vAZQ&oh=00_Afj4YxNzPV7TfrKmh9-TO0fj7ASYMUtE_D5AkMv1VIZ-Tg&oe=692D731F",
+            "https://scontent.fvte1-2.fna.fbcdn.net/v/t39.30808-6/552770795_122131662908900284_8993875853961034449_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=111&ccb=1-7&_nc_sid=833d8c&_nc_ohc=QhSAVw6mZooQ7kNvwF4ajiX&_nc_oc=AdkWf_2eewH--nOxLN7Yv-UTFQr8rERdMQpXzvwNHgUnCM_LlhuJBkixmGYxSH5qgZw&_nc_zt=23&_nc_ht=scontent.fvte1-2.fna&_nc_gid=3ieqULaQYwfrZVs9-bDMEQ&oh=00_AfjN7nPRt0FKztzs0-CdDZv_PF0SHjm-rZ0PgrSy5BR-Vw&oe=692D64A6",
+            "https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-14-pro-4.jpg",
+            "https://media.elwatannews.com/media/img/mediaarc/medium/20391099881660810781.jpg"
+
         ];
 
         const carouselInner = document.getElementById("carousel-inner");
@@ -226,6 +418,232 @@
 
         trackEvent('page_view', { page: 'index' });
 
+        // *******************************************************************
+        // ** NEW: ระบบข้อมูลลูกค้า (Customer Info System) **
+        // *******************************************************************
+        let customerInfo = JSON.parse(localStorage.getItem('fuji_mobile_customer_info')) || null;
+        const customerInfoForm = document.getElementById('customerInfoForm');
+        const customerInfoModal = new bootstrap.Modal(document.getElementById('customerInfoModal'));
+        const finalOrderBtn = document.getElementById('finalOrderBtn');
+        const cartModal = document.getElementById('cartModal');
+
+
+        function updateCustomerInfoDisplay() {
+            const displayDiv = document.getElementById('customerInfoDisplay');
+            const form = document.getElementById('customerInfoForm');
+            const finalOrderBtn = document.getElementById('finalOrderBtn');
+            const saveInfoBtn = document.getElementById('saveInfoBtn');
+
+            if (customerInfo) {
+                // แสดงข้อมูลที่บันทึกไว้
+                document.getElementById('display-name').textContent = customerInfo.fullName;
+                document.getElementById('display-phone').textContent = customerInfo.phoneNumber;
+                document.getElementById('display-whatsapp').textContent = customerInfo.whatsappNumber || '-';
+                document.getElementById('display-address').textContent = customerInfo.currentAddress;
+                document.getElementById('display-city').textContent = customerInfo.city;
+                document.getElementById('display-province').textContent = customerInfo.province;
+                document.getElementById('display-branch').textContent = customerInfo.nearbyBranch || '-';
+
+                displayDiv.style.display = 'block';
+                form.style.display = 'none';
+                finalOrderBtn.style.display = 'block';
+            } else {
+                // แสดงฟอร์ม
+                displayDiv.style.display = 'none';
+                form.style.display = 'block';
+                finalOrderBtn.style.display = 'none';
+                saveInfoBtn.textContent = 'ກົດບັນທຶກລາຍການ';
+            }
+        }
+
+        // ฟังก์ชันเมื่อกด "แก้ไข"
+        window.editCustomerInfo = () => {
+            // โหลดข้อมูลเก่าเข้าฟอร์ม
+            document.getElementById('fullName').value = customerInfo.fullName || '';
+            document.getElementById('phoneNumber').value = customerInfo.phoneNumber || '';
+            document.getElementById('whatsappNumber').value = customerInfo.whatsappNumber || '';
+            document.getElementById('currentAddress').value = customerInfo.currentAddress || '';
+            document.getElementById('city').value = customerInfo.city || '';
+            document.getElementById('province').value = customerInfo.province || '';
+            document.getElementById('nearbyBranch').value = customerInfo.nearbyBranch || '';
+
+            // เปลี่ยนจากแสดงผลเป็นแสดงฟอร์ม
+            document.getElementById('customerInfoDisplay').style.display = 'none';
+            document.getElementById('customerInfoForm').style.display = 'block';
+            document.getElementById('saveInfoBtn').textContent = 'ບັນທຶກການແກ້ໄຂ';
+            finalOrderBtn.style.display = 'none';
+        }
+
+        // Event Listener สำหรับฟอร์มบันทึกข้อมูล
+        customerInfoForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            customerInfo = {
+                fullName: document.getElementById('fullName').value,
+                phoneNumber: document.getElementById('phoneNumber').value,
+                whatsappNumber: document.getElementById('whatsappNumber').value,
+                currentAddress: document.getElementById('currentAddress').value,
+                city: document.getElementById('city').value,
+                province: document.getElementById('province').value,
+                nearbyBranch: document.getElementById('nearbyBranch').value,
+                timestamp: Date.now()
+            };
+
+            localStorage.setItem('fuji_mobile_customer_info', JSON.stringify(customerInfo));
+            updateCustomerInfoDisplay();
+            alert('ບັນທຶກຂໍ້ມູນລູກຄ້າສຳເລັດແລ້ວ! ທ່ານສາມາດກົດປຸ່ມສັ່ງຊື້ສິນຄ້າໄດ້ເລີຍ');
+            trackEvent('save_customer_info', { name: customerInfo.fullName });
+        });
+
+        // Event Listener สำหรับปุ่มสั่งซื้อสินค้า (ขั้นสุดท้าย)
+        finalOrderBtn.addEventListener('click', () => {
+            submitOrder();
+        });
+
+        async function submitOrder() {
+            if (cart.length === 0 || !customerInfo) {
+                alert('ກະລຸນາເພີ່ມສິນຄ້າລົງໃນກະຕ່າ ແລະ ບັນທຶກຂໍ້ມູນລູກຄ້າກ່ອນສັ່ງຊື້.');
+                return;
+            }
+
+            // คำนวณยอดรวม
+            let total = cart.reduce((sum, item) => {
+                const price = parseFloat(item.price.replace(' dollars', ''));
+                return sum + (price * item.quantity);
+            }, 0);
+
+            const orderData = {
+                customer: customerInfo,
+                items: cart,
+                total: total.toFixed(2),
+                status: 'New Order', // สถานะเริ่มต้น
+                orderDate: new Date().toISOString()
+            };
+
+            try {
+                // ส่งข้อมูลคำสั่งซื้อไปที่ Firebase ภายใต้ 'orders'
+                const newOrderRef = await push(dbRef(db, 'orders'), orderData);
+
+                // ล้างตะกร้าสินค้า
+                cart = [];
+                localStorage.removeItem('fuji_mobile_cart');
+                updateCartDisplay();
+
+                // ปิด Modal
+                customerInfoModal.hide();
+
+                // แจ้งเตือนลูกค้า
+                alert(`ສັ່ງຊື້ສິນຄ້າສຳເລັດແລ້ວ! ຂໍຂອບໃຈທ່ານ ${customerInfo.fullName} \nເລກທີຄຳສັ່ງຊື້: ${newOrderRef.key}\nລາຍການທັງໝົດ: ${orderData.total} dollars.\nແອັດມິນຈະຕິດຕໍ່ກັບທ່ານໄວໆນີ້.\n\nກະລຸນາໄປທີ່ Admin2.html ເພື່ອເບິ່ງລາຍການສັ່ງຊື້.`);
+                trackEvent('order_placed', { orderId: newOrderRef.key, total: total });
+
+                // ไม่ได้เปลี่ยนหน้า แต่แจ้งให้แอดมินไปหน้า Admin2.html
+                // window.location.href = 'Admin2.html'; // ถ้าต้องการเปลี่ยนหน้าอัตโนมัติ
+
+            } catch (error) {
+                console.error("Error submitting order: ", error);
+                alert("ເກີດຂໍ້ຜິດພາດໃນການສັ່ງຊື້: " + error.message);
+            }
+        }
+
+        // ** 1. ระบบตะกร้าสินค้า (Cart System) **
+        let cart = JSON.parse(localStorage.getItem('fuji_mobile_cart')) || []; // โหลดตะกร้าจาก LocalStorage
+        const cartCountElement = document.getElementById('cart-count');
+        const cartItemsElement = document.getElementById('cartItems');
+        const cartTotalElement = document.getElementById('cartTotal');
+        const emptyCartMessage = document.getElementById('emptyCartMessage');
+        const clearCartBtn = document.getElementById('clearCartBtn');
+        const checkoutBtn = document.getElementById('checkoutBtn');
+
+        function updateCartDisplay() {
+            cartCountElement.textContent = cart.reduce((total, item) => total + item.quantity, 0);
+            cartItemsElement.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                emptyCartMessage.style.display = 'block';
+                checkoutBtn.disabled = true; // ปิดปุ่มสั่งซื้อถ้าตะกร้าว่าง
+            } else {
+                emptyCartMessage.style.display = 'none';
+                checkoutBtn.disabled = false; // เปิดปุ่มสั่งซื้อ
+                cart.forEach((item, index) => {
+                    const price = parseFloat(item.price.replace(' dollars', ''));
+                    total += price * item.quantity;
+
+                    const li = document.createElement('li');
+                    li.className = 'list-group-item';
+                    li.innerHTML = `
+                        <div class="item-details">
+                            <h6 class="mb-1">${item.name}</h6>
+                            <small>${price.toFixed(2)} dollars x ${item.quantity}</small>
+                        </div>
+                        <div class="item-actions">
+                            <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${index}, 1)">+</button>
+                            <button class="btn btn-sm btn-outline-secondary" onclick="updateQuantity(${index}, -1)">-</button>
+                            <button class="btn btn-sm btn-danger" onclick="removeItem(${index})">ລົບ</button>
+                        </div>
+                    `;
+                    cartItemsElement.appendChild(li);
+                });
+            }
+
+            cartTotalElement.textContent = total.toFixed(2) + ' dollars';
+            localStorage.setItem('fuji_mobile_cart', JSON.stringify(cart)); // บันทึกตะกร้าลง LocalStorage
+        }
+
+        window.addToCart = (product) => {
+            const existingItem = cart.find(item => item.name === product.name);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartDisplay();
+            trackEvent('add_to_cart', { product: product.name, price: product.price, quantity: 1 });
+            alert(`ເພີ່ມ ${product.name} ເຂົ້າກະຕ່າແລ້ວ! ຈຳນວນໃນກະຕ່າ: ${cart.find(item => item.name === product.name).quantity}`);
+        };
+
+        window.updateQuantity = (index, change) => {
+            cart[index].quantity += change;
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            updateCartDisplay();
+        };
+
+        window.removeItem = (index) => {
+            cart.splice(index, 1);
+            updateCartDisplay();
+        };
+
+        clearCartBtn.addEventListener('click', () => {
+            if (confirm('ທ່ານຕ້ອງການລ້າງກະຕ່າສິນຄ້າທັງໝົດແມ່ນບໍ່?')) {
+                cart = [];
+                updateCartDisplay();
+                trackEvent('clear_cart', {});
+            }
+        });
+
+        // NEW: ปุ่มสั่งซื้อจะเปิด Modal กรอกข้อมูลลูกค้า
+        checkoutBtn.addEventListener('click', () => {
+            if (cart.length === 0) {
+                alert('ກະລຸນາເພີ່ມສິນຄ້າລົງໃນກະຕ່າກ່ອນສັ່ງຊື້');
+                return;
+            }
+
+            // ปิด Cart Modal
+            const cartModalInstance = bootstrap.Modal.getInstance(cartModal);
+            if (cartModalInstance) cartModalInstance.hide();
+
+            // เตรียมและเปิด Customer Info Modal
+            updateCustomerInfoDisplay(); // แสดงข้อมูลที่บันทึกไว้หรือฟอร์มเปล่า
+            customerInfoModal.show();
+
+            trackEvent('checkout_click', { item_count: cart.length });
+        });
+
+        // ** 2. ฟังก์ชันหลักในการแสดงสินค้า (ปรับปรุง buy-btn) **
         function renderProducts(category, containerId, limit = 0) {
             const container = document.getElementById(containerId);
             onValue(dbRef(db, 'products/' + category), (snapshot) => {
@@ -238,6 +656,7 @@
                     const p = data[key];
                     const col = document.createElement('div');
                     col.className = 'col-6 col-md-3 mb-3';
+                    // ** เพิ่ม product-data attribute เพื่อใช้ในการเพิ่มลงตะกร้า **
                     col.innerHTML = `
                         <div class="card product-card h-100">
                             <img src="${p.imageUrl}" class="card-img-top" alt="${p.name}">
@@ -245,10 +664,10 @@
                                 <h5 class="card-title">${p.name}</h5>
                                 <p class="card-text price">${p.price} dollars</p>
                                 <p class="card-text muted">${p.description || ''}</p>
-                                <p class="countdown" data-start-time="${Date.now()}">Loading timer...</p>
+                                <p class="countdown" data-product-key="${category}-${key}">Loading timer...</p>
                                 <div class="d-flex justify-content-between align-items-center mt-2">
-                                    <button class="btn btn-sm btn-outline-secondary copy-btn" data-text="ชื่อ:${p.name}\nราคา:${p.price}\nรายละเอียด:${p.description}">Copy</button>
-                                    <a href="#" class="btn btn-sm btn-primary buy-btn">Buy</a>
+                                    <button class="btn btn-sm btn-outline-secondary copy-btn" data-text="ຊື່:${p.name}\nລາຄາ:${p.price}\nລາຍລະອຽດ:${p.description}">Copy</button>
+                                    <button class="btn btn-sm btn-primary buy-btn" data-product='${JSON.stringify({ name: p.name, price: p.price })}'>Buy</button>
                                 </div>
                             </div>
                         </div>`;
@@ -259,29 +678,51 @@
                     btn.addEventListener('click', () => {
                         navigator.clipboard.writeText(btn.dataset.text);
                         trackEvent('product_copy', { product: btn.dataset.text });
+                        alert('ຄັດລອກລາຍລະອຽດສິນຄ້າແລ້ວ');
                     });
                 });
 
-                container.querySelectorAll('.buy-btn').forEach((btn, i) => {
-                    btn.addEventListener('click', () => {
-                        const productName = useKeys[i] ? data[useKeys[i]].name : '';
-                        trackEvent('product_click', { product: productName });
+                // ** เพิ่ม Event Listener สำหรับปุ่ม Buy ใหม่ **
+                container.querySelectorAll('.buy-btn').forEach((btn) => {
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault(); // ป้องกันไม่ให้ลิงก์ทำงาน (ถ้าเป็น <a>)
+                        const productData = JSON.parse(btn.dataset.product);
+                        window.addToCart(productData);
                     });
                 });
 
                 startCountdowns();
+                updateCartDisplay(); // อัพเดทตะกร้าหลังจากโหลดสินค้า
             });
         }
+
+        // ** 3. ตัวนับถอยหลัง 24 ชั่วโมงแบบถาวร (Persistent Countdown) **
+        const TIMER_KEY = 'fuji_mobile_countdown_end_time';
+        const DURATION = 24 * 60 * 60 * 1000; // 24 ชั่วโมงเป็นมิลลิวินาที
+
+        function getEndTime() {
+            let endTime = localStorage.getItem(TIMER_KEY);
+            if (!endTime || parseInt(endTime, 10) < Date.now()) {
+                // ถ้าไม่มีค่า หรือค่าที่บันทึกไว้หมดเวลาแล้ว (หมดไปแล้วในอดีต)
+                endTime = Date.now() + DURATION;
+                localStorage.setItem(TIMER_KEY, endTime);
+                // อาจจะต้องรีเซ็ตข้อมูลสินค้าที่เกี่ยวข้องกับการนับถอยหลังในอนาคต หากมี
+            }
+            return parseInt(endTime, 10);
+        }
+
+        const countdownEndTime = getEndTime(); // กำหนดเวลาสิ้นสุดครั้งเดียวต่อการโหลดหน้า
 
         function startCountdowns() {
             const countdownElems = document.querySelectorAll('.countdown');
 
-            countdownElems.forEach(elem => {
-                const startTime = parseInt(elem.dataset.startTime, 10);
-
-                function updateTimer() {
+            // ใช้ setInterval Global เพื่ออัพเดททุกตัวพร้อมกัน
+            if (!window.countdownInterval) {
+                window.countdownInterval = setInterval(() => {
                     const now = Date.now();
-                    let diff = 24 * 60 * 60 * 1000 - (now - startTime) % (24 * 60 * 60 * 1000);
+                    const timeLeft = countdownEndTime - now;
+
+                    let diff = Math.max(0, timeLeft); // เหลือเวลา 0 หรือมากกว่า
 
                     const hours = Math.floor(diff / (1000 * 60 * 60));
                     diff %= 1000 * 60 * 60;
@@ -289,19 +730,36 @@
                     diff %= 1000 * 60;
                     const seconds = Math.floor(diff / 1000);
 
-                    elem.textContent = `Flash deal ends in: ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                }
+                    const timerText = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                    const display = timeLeft > 0 ? `Flash deal ends in: ${timerText}` : 'DEAL EXPIRED';
 
-                updateTimer();
-                setInterval(updateTimer, 1000);
-            });
+                    countdownElems.forEach(elem => {
+                        elem.textContent = display;
+                        if (timeLeft <= 0) {
+                            elem.style.color = '#6c757d'; // เปลี่ยนเป็นสีเทาเมื่อหมดเวลา
+                        }
+                    });
+
+                    if (timeLeft <= 0) {
+                        clearInterval(window.countdownInterval);
+                        window.countdownInterval = null;
+                        localStorage.removeItem(TIMER_KEY); // ลบเวลาที่หมดอายุ
+                        // ควรเรียก getEndTime() อีกครั้งเมื่อมีการโหลดหน้าใหม่เพื่อให้เริ่มนับใหม่
+                    }
+                }, 1000);
+            }
         }
 
+
+        // ** 4. การเรียกใช้ฟังก์ชัน **
         renderProducts('cases', 'cases-row');
         renderProducts('cables', 'cables-row');
         renderProducts('phones', 'phones-row');
         renderProducts('welcome-products', 'welcome-products-row');
         renderProducts('best-seller', 'best-seller-row');
+        updateCartDisplay(); // โหลดและแสดงตะกร้าสินค้าทันทีที่โหลดหน้าเสร็จ
+        updateCustomerInfoDisplay(); // โหลดและแสดงข้อมูลลูกค้าที่บันทึกไว้
+
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
