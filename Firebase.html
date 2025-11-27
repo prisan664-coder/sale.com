@@ -4,32 +4,45 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Admin Chat - FairPrice Online</title>
+    <title>Admin Chat Dashboard | Fuji Mobile</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Favicon -->
     <link rel="shortcut icon"
         href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ85l7fXjM5gRnEzD8xSyHh2vkXHCVN_HKS1Q&s"
         type="image/x-icon">
     <link rel="icon" href="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ85l7fXjM5gRnEzD8xSyHh2vkXHCVN_HKS1Q&s"
         type="image/x-icon">
-    <!-- Schema.org Organization Logo -->
-    <script type="application/ld+json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
-    </script>
 
     <style>
+        :root {
+            --primary-color: #0d6efd;
+            --secondary-color: #6c757d;
+            --admin-bubble: #e3f2fd;
+            /* Light Blue - Admin/My Message */
+            --user-bubble: #ffffff;
+            /* White - User/Others Message */
+        }
+
+        body {
+            background-color: #f7f9fc;
+        }
+
+        /* **** ส่วน Avatar **** */
         #avatarPreview {
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
-            background: #ddd;
+            border: 2px solid var(--primary-color);
+            background: #fff;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            color: #444;
             overflow: hidden;
             flex-shrink: 0;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            /* เพิ่ม cursor เพื่อบอกว่าคลิกได้ */
         }
 
         #avatarPreview img {
@@ -39,36 +52,6 @@
             display: block;
         }
 
-        #messages {
-            height: 400px;
-            overflow-y: auto;
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 8px;
-        }
-
-        .msg {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 10px;
-            align-items: flex-start;
-        }
-
-        .bubble {
-            background: #fff;
-            padding: 8px 12px;
-            border-radius: 12px;
-            max-width: 75%;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-            position: relative;
-        }
-
-        .meta {
-            font-size: 12px;
-            color: #6c757d;
-            margin-top: 4px;
-        }
-
         .placeholderInitial {
             width: 100%;
             height: 100%;
@@ -76,45 +59,204 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 16px;
+            font-size: 20px;
             color: #fff;
-            background: #6c757d;
+            background: var(--primary-color);
+        }
+
+        /* **** ส่วน Modal เลือก Avatar **** */
+        .avatar-selection-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            gap: 15px;
+            padding: 10px;
+        }
+
+        .avatar-option {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            /* เพิ่มเพื่อให้ภาพอยู่ตรงกลาง */
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* แก้ไขเพื่อให้รูปที่ใช้ได้จริงแสดงผลได้ดีขึ้น */
+        .avatar-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* สำหรับแสดงผลเมื่อรูปโหลดไม่ได้ (แก้ปัญหา URL เสีย) */
+        .avatar-option .no-img {
+            width: 100%;
+            height: 100%;
+            background-color: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            color: #555;
+        }
+
+
+        .avatar-option:hover {
+            border-color: #ccc;
+        }
+
+        .avatar-option.selected {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.5);
+        }
+
+        /* **** ส่วน Chat Container (ไม่เปลี่ยนจากเดิม) **** */
+        #messages {
+            height: 500px;
+            overflow-y: auto;
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #dee2e6;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        /* **** ข้อความ (ไม่เปลี่ยนจากเดิม) **** */
+        .msg {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 0;
+            align-items: flex-end;
+            width: 100%;
+        }
+
+        .admin-msg {
+            justify-content: flex-end;
+        }
+
+        .admin-msg .bubble {
+            background: var(--admin-bubble);
+            color: #111;
+            border-bottom-right-radius: 4px;
+        }
+
+        .admin-msg .avBox {
+            order: 2;
+        }
+
+        .user-msg {
+            justify-content: flex-start;
+        }
+
+        .user-msg .bubble {
+            background: var(--user-bubble);
+            color: #333;
+            border-bottom-left-radius: 4px;
+        }
+
+        .bubble {
+            padding: 10px 14px;
+            border-radius: 18px;
+            max-width: 70%;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+            position: relative;
+            word-wrap: break-word;
+            flex-shrink: 1;
+        }
+
+        .bubble strong {
+            display: block;
+            font-size: 0.9em;
+            color: var(--primary-color);
+            margin-bottom: 3px;
+        }
+
+        .admin-msg .bubble strong {
+            color: #0a58ca;
+        }
+
+        .meta {
+            font-size: 11px;
+            color: var(--secondary-color);
+            margin-top: 5px;
+            text-align: right;
+            line-height: 1.2;
+        }
+
+        /* ซ่อนปุ่ม Action บน bubble */
+        .bubble .action-buttons {
+            display: none;
+            position: absolute;
+            top: -10px;
+            right: 0;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            padding: 2px 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .bubble:hover .action-buttons {
+            display: flex;
+            gap: 5px;
         }
 
         .edit-btn,
         .delete-btn,
         .reply-btn {
             font-size: 10px;
-            padding: 2px 5px;
-            margin-left: 5px;
+            padding: 2px 6px;
+            border-radius: 6px;
         }
 
         .reply-btn {
             background-color: #0dcaf0;
-            border: 1px solid #0dcaf0;
+            border: none;
             color: #fff;
         }
 
-        .reply-btn:hover {
-            background-color: #31d2f2;
-            border-color: #31d2f2;
-            color: #fff;
+        /* **** Input Area (ไม่เปลี่ยนจากเดิม) **** */
+        #messageInput,
+        #nameInput {
+            border-radius: 50px;
+            padding: 10px 20px;
+            border: 1px solid #ccc;
+        }
+
+        .send-btn-icon {
+            border-radius: 50px;
+            padding: 10px 20px;
+        }
+
+        .name-input-group {
+            max-width: 250px;
         }
     </style>
 </head>
 
 <body class="bg-light">
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm mb-4">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-lg mb-4">
         <div class="container">
-            <a class="navbar-brand text-primary fw-bold" href="index.html">FairPrice Online</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <a class="navbar-brand fw-bold text-white" href="index.html">
+                <i class="fas fa-headset me-2"></i> Admin Support Hub
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link btn btn-secondary text-white" href="index.html">Home page</a>
+                        <a class="nav-link btn btn-light text-primary fw-bold px-3 py-1 rounded-pill" href="index.html">
+                            <i class="fas fa-home me-1"></i> Home Page
+                        </a>
                     </li>
                 </ul>
             </div>
@@ -122,36 +264,122 @@
     </nav>
 
     <div class="container py-4">
-        <h2 class="mb-4 text-primary">Admin Chat</h2>
+        <h2 class="mb-4 text-primary d-flex align-items-center">
+            <i class="fas fa-comments me-2"></i> Admin Chat Dashboard
+        </h2>
 
-        <div class="d-flex align-items-center mb-3 gap-3">
-            <div id="avatarPreview" title="Avatar ของคุณ"></div>
-            <div class="flex-grow-1 d-flex gap-2" id="uploadRow">
-                <input type="text" class="form-control" id="avatarUrlInput" placeholder="Upload your URL profile">
-                <button class="btn btn-success" id="uploadBtn">Save URL</button>
-                <button class="btn btn-danger d-none" id="removeAvatarBtn">delete</button>
+        <div class="card shadow-sm mb-4">
+            <div class="card-body d-flex align-items-center gap-3">
+                <div id="avatarPreview" title="คลิกเพื่อเลือก Avatar"></div>
+
+                <div class="flex-grow-1 d-flex flex-wrap gap-2" id="uploadRow">
+                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#avatarModal">
+                        <i class="fas fa-user-circle me-1"></i> ເລືອກ Avatar ທີທ່ານມັກ
+                    </button>
+                    <input type="text" class="form-control flex-grow-1 d-none" id="avatarUrlInput"
+                        placeholder="ໃສ່ URL ຮູບໂປຣໄຟລຂອງທ່ານ (ສຳຫລັບ Custom URL)">
+                    <button class="btn btn-success d-none" id="uploadBtn">
+                        <i class="fas fa-save me-1"></i> ບັນທຶກ URL
+                    </button>
+                    <button class="btn btn-danger d-none" id="removeAvatarBtn">
+                        <i class="fas fa-trash-alt me-1"></i> ລົບຮູບ
+                    </button>
+                </div>
             </div>
         </div>
 
-        <div class="row g-2 mb-3">
-            <div class="col-md-4">
-                <input type="text" class="form-control" id="nameInput" placeholder="User name ( put here )">
+        <div class="row g-4">
+            <div class="col-12">
+                <div class="card shadow-lg border-0">
+                    <div class="card-header bg-white border-bottom p-3">
+                        <h5 class="text-secondary mb-0">
+                            <i class="fas fa-envelope-open-text me-1"></i> ຂໍ້ຄວາມສົນທະນາທັ້ງຫມົດ
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="messages">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="col-md-6">
-                <input type="text" class="form-control" id="messageInput" placeholder="Typing......">
-            </div>
-            <div class="col-md-2">
-                <button class="btn btn-primary w-100" onclick="sendMessage()">Send</button>
+
+            <div class="col-12">
+                <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-3 shadow-sm">
+                    <div class="name-input-group">
+                        <input type="text" class="form-control" id="nameInput" placeholder="ລະບຸຊື່ຜູ້ໃຊ້ງານ">
+                    </div>
+
+                    <div class="flex-grow-1">
+                        <input type="text" class="form-control" id="messageInput"
+                            placeholder="ພິມຂໍ້ຄວາມ... (ກົດ Enter ເພື່ອສົ່ງຂໍ້ຄວາມ)">
+                    </div>
+
+                    <div>
+                        <button class="btn btn-primary send-btn-icon" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i> <span class="d-none d-sm-inline ms-1">ສົ່ງ</span>
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <h5 class="text-secondary mb-2">Chat....</h5>
-        <div id="messages" class="mb-3"></div>
     </div>
+
+    <div class="modal fade" id="avatarModal" tabindex="-1" aria-labelledby="avatarModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="avatarModalLabel"><i class="fas fa-smile me-1"></i> ເລືອກ Avatar ກະຕຸນ
+                    </h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h6 class="text-primary"><i class="fas fa-venus me-1"></i> ສຳລັບແບບຜູ້ຍີງ</h6>
+                    <div class="avatar-selection-grid mb-3" id="femaleAvatars">
+                    </div>
+
+                    <h6 class="text-info"><i class="fas fa-mars me-1"></i> ສຳລັບແບບຜູ້ຊາຍ</h6>
+                    <div class="avatar-selection-grid" id="maleAvatars">
+                    </div>
+                    <hr>
+                    <p class="text-muted small mb-0">ຖ້າຕ້ອງການໃຊ້ງານ URL ອື່ນໆ ໃຫ້ໃສ່ URL ໃນຊ່ອງແລ້ວກົດປຸມ "ບັນທຶກ URL"
+                        (ຊ່ອງ URL ຈະປະກົດຕົວເມື່ອບໍ່ມີ Avatar ທີຖືກເລືອກໄວ້ກ່ອນຫນ້ານີ້)</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">ປິດ</button>
+                    <button type="button" class="btn btn-danger" id="modalRemoveAvatarBtn"><i
+                            class="fas fa-trash-alt me-1"></i> ລົບ Avatar ທີເລືອກ</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
         import { getDatabase, ref as dbRef, push, onValue, remove, update } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+
+        // *** 1. CONFIGURATION: ตั้งค่า URL รูป Avatar การ์ตูนที่นี่ ***
+        // เปลี่ยนไปใช้ URL ที่สามารถโหลดได้จริง เพื่อแก้ไขปัญหา
+        const FEMALE_AVATARS = [
+            'https://api.iconify.design/twemoji:woman-face.svg',
+            'https://api.iconify.design/twemoji:girl-light-skin-tone.svg',
+            'https://api.iconify.design/twemoji:woman-with-veil-dark-skin-tone.svg',
+            'https://api.iconify.design/twemoji:woman-mage.svg',
+            'https://api.iconify.design/twemoji:woman-artist.svg',
+        ];
+
+        const MALE_AVATARS = [
+            'https://api.iconify.design/twemoji:man-face.svg',
+            'https://api.iconify.design/twemoji:man-light-skin-tone.svg',
+            'https://api.iconify.design/twemoji:man-in-tuxedo-dark-skin-tone.svg',
+            'https://api.iconify.design/twemoji:man-cook.svg',
+            'https://api.iconify.design/twemoji:man-mechanic.svg',
+        ];
+
+        // *** ------------------------------------------------------------------------------------------ ***
+
 
         const firebaseConfig = {
             apiKey: "AIzaSyCLXIs8EaJNauHJpcnDMKU99C-uBKKR0aU",
@@ -171,33 +399,166 @@
         const uploadBtn = document.getElementById('uploadBtn');
         const removeAvatarBtn = document.getElementById('removeAvatarBtn');
         const messagesDiv = document.getElementById('messages');
+        const modalRemoveAvatarBtn = document.getElementById('modalRemoveAvatarBtn');
+        const uploadRow = document.getElementById('uploadRow');
+
 
         const AVATAR_KEY = 'chat_avatar_url_bs5';
         let currentAvatarUrl = localStorage.getItem(AVATAR_KEY) || null;
 
+        // สำหรับระบุชื่อแอดมิน (ใช้ข้อมูลที่คุณบันทึกไว้: 'คำ', 'น้องฟ้า')
+        const ADMIN_NAMES = ['Admin', 'คำ', 'น้องฟ้า', 'Admin Support'];
+
+
+        // *** 2. FUNCTION: จัดการแสดงผล Avatar และซ่อน/แสดง input URL ***
         function renderAvatarPreview() {
             avatarPreview.innerHTML = '';
+            // ตรวจสอบว่า Avatar ที่ใช้อยู่เป็น Avatar ที่เลือกจาก Modal หรือไม่
+            const isModalAvatar = FEMALE_AVATARS.includes(currentAvatarUrl) || MALE_AVATARS.includes(currentAvatarUrl);
+
             if (currentAvatarUrl) {
-                const img = document.createElement('img'); img.src = currentAvatarUrl; avatarPreview.appendChild(img);
-                avatarUrlInput.classList.add('d-none'); uploadBtn.classList.add('d-none'); removeAvatarBtn.classList.remove('d-none');
+                const img = document.createElement('img');
+                img.src = currentAvatarUrl;
+                img.onerror = function () {
+                    // หากโหลดรูปไม่ได้ ให้แสดงเป็น Initial Placeholder แทน
+                    avatarPreview.innerHTML = '';
+                    const initial = (localStorage.getItem('chat_name_bs5') && localStorage.getItem('chat_name_bs5')[0]) ? localStorage.getItem('chat_name_bs5')[0].toUpperCase() : 'U';
+                    const ph = document.createElement('div'); ph.className = 'placeholderInitial'; ph.textContent = initial;
+                    avatarPreview.appendChild(ph);
+                };
+                avatarPreview.appendChild(img);
+
+                // ถ้าเป็น Modal Avatar หรือไม่ได้ตั้งค่า URL จะซ่อนช่อง input
+                if (isModalAvatar) {
+                    avatarUrlInput.classList.add('d-none');
+                    uploadBtn.classList.add('d-none');
+                } else {
+                    // ถ้าเป็น Custom URL (ไม่ได้อยู่ในลิสต์) ให้แสดงช่อง input URL
+                    avatarUrlInput.classList.remove('d-none');
+                    uploadBtn.classList.remove('d-none');
+                    avatarUrlInput.value = currentAvatarUrl;
+                }
+
+                removeAvatarBtn.classList.remove('d-none');
+                // ซ่อนปุ่ม "เลือก Avatar" ชั่วคราวเมื่อมี URL อยู่
+                uploadRow.querySelector('.btn-primary').classList.add('d-none');
+
             } else {
+                // ไม่มี Avatar
                 const ph = document.createElement('div'); ph.className = 'placeholderInitial'; ph.textContent = 'U'; avatarPreview.appendChild(ph);
-                avatarUrlInput.classList.remove('d-none'); uploadBtn.classList.remove('d-none'); removeAvatarBtn.classList.add('d-none');
+                avatarUrlInput.classList.remove('d-none');
+                uploadBtn.classList.remove('d-none');
+                removeAvatarBtn.classList.add('d-none');
+                avatarUrlInput.value = '';
+                // แสดงปุ่ม "เลือก Avatar"
+                uploadRow.querySelector('.btn-primary').classList.remove('d-none');
             }
         }
         renderAvatarPreview();
 
+        // *** 3. FUNCTION: สร้าง Avatar options ใน Modal ***
+        function createAvatarOption(url) {
+            const option = document.createElement('div');
+            option.className = 'avatar-option';
+            if (url === currentAvatarUrl) {
+                option.classList.add('selected');
+            }
+            option.setAttribute('data-url', url);
+
+            const img = document.createElement('img');
+            img.src = url;
+            img.alt = 'Avatar';
+
+            // เพิ่ม Fallback ในกรณีที่รูปโหลดไม่ได้
+            img.onerror = function () {
+                this.style.display = 'none';
+                const fallback = document.createElement('div');
+                fallback.className = 'no-img';
+                fallback.textContent = '❌'; // สัญลักษณ์ว่าโหลดไม่ได้
+                option.appendChild(fallback);
+            }
+            option.appendChild(img);
+
+            option.addEventListener('click', () => {
+                // ลบ selected จากทั้งหมด
+                document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+                // เพิ่ม selected ให้กับตัวที่ถูกเลือก
+                option.classList.add('selected');
+
+                // บันทึกและแสดงผล
+                currentAvatarUrl = url;
+                localStorage.setItem(AVATAR_KEY, url);
+                renderAvatarPreview();
+
+                // ปิด Modal
+                const modal = bootstrap.Modal.getInstance(document.getElementById('avatarModal'));
+                if (modal) modal.hide();
+            });
+
+            return option;
+        }
+
+        // *** 4. EVENT: โหลด Avatar ใน Modal เมื่อ Modal เปิด ***
+        document.getElementById('avatarModal').addEventListener('show.bs.modal', function () {
+            const femaleDiv = document.getElementById('femaleAvatars');
+            const maleDiv = document.getElementById('maleAvatars');
+            femaleDiv.innerHTML = '';
+            maleDiv.innerHTML = '';
+
+            FEMALE_AVATARS.forEach(url => femaleDiv.appendChild(createAvatarOption(url)));
+            MALE_AVATARS.forEach(url => maleDiv.appendChild(createAvatarOption(url)));
+
+            // อัปเดตสถานะ Selected
+            document.querySelectorAll('.avatar-option').forEach(opt => {
+                if (opt.getAttribute('data-url') === currentAvatarUrl) {
+                    opt.classList.add('selected');
+                } else {
+                    opt.classList.remove('selected');
+                }
+            });
+        });
+
+        // *** 5. EVENT: ปุ่ม "บันทึก URL" (สำหรับ Custom URL) ***
         uploadBtn.addEventListener('click', () => {
-            const url = avatarUrlInput.value.trim(); if (!url) { alert('กรุณาใส่ URL รูปก่อน'); return; }
-            currentAvatarUrl = url; localStorage.setItem(AVATAR_KEY, url); renderAvatarPreview();
+            const url = avatarUrlInput.value.trim();
+            if (!url) { alert('กรุณาใส่ URL รูปก่อน'); return; }
+            currentAvatarUrl = url;
+            localStorage.setItem(AVATAR_KEY, url);
+            renderAvatarPreview();
         });
 
-        removeAvatarBtn.addEventListener('click', () => {
-            if (!confirm('ต้องการลบรูปนี้หรือไม่?')) return;
-            currentAvatarUrl = null; localStorage.removeItem(AVATAR_KEY); renderAvatarPreview();
+        // *** 6. EVENT: ปุ่ม "ลบรูป" (หลัก) และ "ลบ Avatar ที่เลือก" (ใน Modal) ***
+        function removeAvatar() {
+            if (!confirm('ต้องการลบ Avatar ปัจจุบันหรือไม่?')) return;
+            currentAvatarUrl = null;
+            localStorage.removeItem(AVATAR_KEY);
+            renderAvatarPreview();
+            // ลบ selected ใน Modal ด้วย
+            document.querySelectorAll('.avatar-option').forEach(opt => opt.classList.remove('selected'));
+
+            const modal = bootstrap.Modal.getInstance(document.getElementById('avatarModal'));
+            if (modal) modal.hide();
+        }
+
+        removeAvatarBtn.addEventListener('click', removeAvatar);
+        modalRemoveAvatarBtn.addEventListener('click', removeAvatar);
+        avatarPreview.addEventListener('click', () => {
+            // คลิกที่ preview เพื่อเปิด Modal (กรณีที่ยังไม่มี Avatar)
+            if (!currentAvatarUrl) {
+                const modal = new bootstrap.Modal(document.getElementById('avatarModal'));
+                modal.show();
+            } else {
+                // ถ้ามีแล้ว เปิด Modal เพื่อให้เลือกอันใหม่ได้
+                const modal = new bootstrap.Modal(document.getElementById('avatarModal'));
+                modal.show();
+            }
         });
 
+
+        // *** 7. FUNCTION & EVENT: Chat Logic (มีการแก้ไขเล็กน้อย) ***
         function addMessage(name, message) {
+            // บันทึกชื่อผู้ใช้ล่าสุดที่ใช้
+            localStorage.setItem('chat_name_bs5', name);
             const messagesRef = dbRef(database, 'messages');
             push(messagesRef, { name: name, text: message, timestamp: Date.now(), avatarUrl: currentAvatarUrl || null, edited: false });
         }
@@ -210,58 +571,123 @@
             document.getElementById('messageInput').value = '';
         }
 
+        // โหลดชื่อล่าสุดเมื่อเข้าหน้าเว็บ
+        document.addEventListener('DOMContentLoaded', () => {
+            const savedName = localStorage.getItem('chat_name_bs5');
+            if (savedName) {
+                document.getElementById('nameInput').value = savedName;
+            }
+        });
+
+
         const messagesRef = dbRef(database, 'messages');
         onValue(messagesRef, (snapshot) => {
             const data = snapshot.val() || {};
             messagesDiv.innerHTML = '';
             const keys = Object.keys(data);
             keys.sort((a, b) => (data[a].timestamp || 0) - (data[b].timestamp || 0));
+
             for (const k of keys) {
                 const d = data[k];
-                const wrap = document.createElement('div'); wrap.className = 'msg align-items-start';
+                const isAdmin = ADMIN_NAMES.includes(d.name);
 
-                const avBox = document.createElement('div'); avBox.className = 'avatarBox';
-                const avDiv = document.createElement('div'); avDiv.style.width = '40px'; avDiv.style.height = '40px'; avDiv.style.borderRadius = '50%'; avDiv.style.overflow = 'hidden';
+                const wrap = document.createElement('div');
+                wrap.className = `msg align-items-start ${isAdmin ? 'admin-msg' : 'user-msg'}`;
+
+                // Avatar Box
+                const avBox = document.createElement('div'); avBox.className = 'avBox';
+                const avDiv = document.createElement('div');
+                avDiv.style.width = '40px'; avDiv.style.height = '40px'; avDiv.style.borderRadius = '50%'; avDiv.style.overflow = 'hidden';
+
                 if (d.avatarUrl) {
-                    const img = document.createElement('img'); img.src = d.avatarUrl; img.style.width = '40px'; img.style.height = '40px'; img.style.objectFit = 'cover'; img.style.borderRadius = '50%'; avDiv.appendChild(img);
+                    const img = document.createElement('img'); img.src = d.avatarUrl;
+                    img.style.width = '40px'; img.style.height = '40px'; img.style.objectFit = 'cover'; img.style.borderRadius = '50%';
+                    img.onerror = function () {
+                        // Fallback หากรูปในแชทโหลดไม่ได้
+                        this.parentNode.innerHTML = `<div class="placeholderInitial" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: ${isAdmin ? '#0d6efd' : '#6c757d'}; color: #fff; font-weight: 700; font-size: 18px;">${(d.name && d.name[0]) ? d.name[0].toUpperCase() : '?'}</div>`;
+                    };
+                    avDiv.appendChild(img);
                 } else {
-                    const ph = document.createElement('div'); ph.className = 'placeholderInitial'; ph.style.width = '40px'; ph.style.height = '40px'; ph.style.borderRadius = '50%'; ph.style.display = 'flex';
-                    ph.style.alignItems = 'center'; ph.style.justifyContent = 'center'; ph.style.background = '#6c757d'; ph.style.color = '#fff'; ph.style.fontWeight = '700';
-                    const initial = (d.name && d.name[0]) ? d.name[0].toUpperCase() : '?'; ph.textContent = initial; avDiv.appendChild(ph);
+                    const ph = document.createElement('div'); ph.className = 'placeholderInitial';
+                    ph.style.width = '40px'; ph.style.height = '40px'; ph.style.borderRadius = '50%'; ph.style.display = 'flex';
+                    ph.style.alignItems = 'center'; ph.style.justifyContent = 'center';
+                    ph.style.background = isAdmin ? '#0d6efd' : '#6c757d';
+                    ph.style.color = '#fff'; ph.style.fontWeight = '700'; ph.style.fontSize = '18px';
+                    const initial = (d.name && d.name[0]) ? d.name[0].toUpperCase() : '?';
+                    ph.textContent = initial;
+                    avDiv.appendChild(ph);
                 }
-                avBox.appendChild(avDiv); wrap.appendChild(avBox);
+                avBox.appendChild(avDiv);
+                wrap.appendChild(avBox);
+
+                // Message Bubble
+                const bubbleContainer = document.createElement('div');
+                bubbleContainer.style.display = 'flex';
+                bubbleContainer.style.flexDirection = 'column';
+                bubbleContainer.style.alignItems = isAdmin ? 'flex-end' : 'flex-start';
+                bubbleContainer.style.maxWidth = '70%';
 
                 const bubble = document.createElement('div'); bubble.className = 'bubble';
                 let textHtml = `<strong>${escapeHtml(d.name)}</strong><div class="mt-1">${escapeHtml(d.text)}</div>`;
-                textHtml += `<div class="meta">${new Date(d.timestamp).toLocaleString('th-TH')}`;
-                if (d.edited) textHtml += ' (แก้ไขแล้ว)';
-                textHtml += `</div>`;
 
-                const editBtn = document.createElement('button'); editBtn.className = 'btn btn-sm btn-warning edit-btn'; editBtn.textContent = 'แก้ไข';
+                // Action Buttons container
+                const actionButtons = document.createElement('div');
+                actionButtons.className = 'action-buttons';
+
+                // Edit Button
+                const editBtn = document.createElement('button');
+                editBtn.className = 'btn btn-sm btn-warning edit-btn'; editBtn.innerHTML = '<i class="fas fa-edit"></i>';
+                editBtn.title = 'แก้ไขข้อความ';
                 editBtn.onclick = () => {
                     const newText = prompt('แก้ไขข้อความ:', d.text);
                     if (newText !== null) {
                         update(dbRef(database, 'messages/' + k), { text: newText, edited: true, timestamp: Date.now() });
                     }
                 };
-                const deleteBtn = document.createElement('button'); deleteBtn.className = 'btn btn-sm btn-danger delete-btn'; deleteBtn.textContent = 'ลบ';
+
+                // Delete Button
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'btn btn-sm btn-danger delete-btn'; deleteBtn.innerHTML = '<i class="fas fa-trash-alt"></i>';
+                deleteBtn.title = 'ลบข้อความ';
                 deleteBtn.onclick = () => { if (confirm('ต้องการลบข้อความนี้หรือไม่?')) remove(dbRef(database, 'messages/' + k)); }
 
-                bubble.innerHTML = textHtml;
-                bubble.appendChild(editBtn);
-                bubble.appendChild(deleteBtn);
-
+                // Reply Button
                 const replyBtn = document.createElement('button');
                 replyBtn.className = 'btn btn-sm reply-btn';
-                replyBtn.textContent = 'ตอบกลับ';
+                replyBtn.innerHTML = '<i class="fas fa-reply"></i>';
+                replyBtn.title = 'ตอบกลับข้อความ';
                 replyBtn.onclick = () => {
-                    const replyText = `ตอบกลับ: "${d.text}" → `;
+                    const replyText = `ตอบกลับ ${escapeHtml(d.name)}: "${d.text.substring(0, 30)}..." → `;
                     document.getElementById('messageInput').value = replyText;
                     document.getElementById('messageInput').focus();
                 };
-                bubble.appendChild(replyBtn);
 
-                wrap.appendChild(bubble);
+                // Add buttons to action container
+                actionButtons.appendChild(editBtn);
+                actionButtons.appendChild(deleteBtn);
+                actionButtons.appendChild(replyBtn);
+
+                bubble.innerHTML = textHtml;
+                bubble.appendChild(actionButtons);
+
+                // Meta Info
+                const meta = document.createElement('div');
+                meta.className = 'meta';
+                let metaText = new Date(d.timestamp).toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' });
+                if (d.edited) metaText += ' • แก้ไขแล้ว';
+                meta.innerHTML = metaText;
+
+                // Append to container
+                bubbleContainer.appendChild(bubble);
+                bubbleContainer.appendChild(meta);
+                wrap.appendChild(bubbleContainer);
+
+                // Adjust order if it's an Admin message
+                if (isAdmin) {
+                    wrap.style.flexDirection = 'row-reverse';
+                    wrap.querySelector('.avBox').style.order = 'unset';
+                }
+
                 messagesDiv.appendChild(wrap);
             }
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -271,8 +697,17 @@
 
         document.getElementById('nameInput').addEventListener('input', (e) => {
             const v = e.target.value.trim();
+            // บันทึกชื่อผู้ใช้ล่าสุดที่กำลังพิมพ์
+            localStorage.setItem('chat_name_bs5', v);
+
+            const isAdmin = ADMIN_NAMES.includes(v);
             if (!currentAvatarUrl) {
-                avatarPreview.innerHTML = ''; const ph = document.createElement('div'); ph.className = 'placeholderInitial'; ph.textContent = v ? v[0].toUpperCase() : 'U'; avatarPreview.appendChild(ph);
+                avatarPreview.innerHTML = '';
+                const ph = document.createElement('div');
+                ph.className = 'placeholderInitial';
+                ph.textContent = v ? v[0].toUpperCase() : 'U';
+                ph.style.background = isAdmin ? '#0d6efd' : '#6c757d';
+                avatarPreview.appendChild(ph);
             }
         });
 
@@ -284,7 +719,6 @@
             }
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
