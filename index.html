@@ -240,6 +240,20 @@
             <a href="Firebase.html">ຕ້ອງການສອບຖາມຫຼືບໍລິການໃດ ກົດທີນີ້ຫາແອັດມິນໄດ້</a>
         </div>
 
+        <!-- User Ask / Help Products -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5>📩 ສອບຖາມ / ຂໍຮູບ + ຂໍລາຄາສິນຄ້າ</h5>
+                <input type="text" id="askImage" class="form-control mb-2"
+                    placeholder="ທັກຫາແອດມິນທາງ Whatsapp ເພື່ອຄວາມວ່ອງໄວ">
+                <textarea id="askText" class="form-control mb-2" rows="2"
+                    placeholder="ພິມລາຍລະອຽດທີຕ້ອງສອບຖາມເຊັ່ນ ລາຄາ ຂໍລິວິວສິນຄ້າ ສົນໃຈ"></textarea>
+                <button id="askSend" class="btn btn-primary w-100">ສົ່ງຂໍ້ຄວາມທາງ Whatsapp</button>
+            </div>
+        </div>
+
+        <div id="askList"></div>
+
         <h4>ໂທລະສັບໄອໂຟນສະເພາະມື 1</h4>
         <div class="row mb-4" id="cases-row"></div>
 
@@ -256,7 +270,8 @@
         <div class="row mb-4" id="welcome-products-row"></div>
 
         <footer class="py-3 text-center">
-            <p>About fujimobile repair Shop Group | Shop for Business | Send E-Gift Vouchers<br>Tips for You | Recipes</p>
+            <p>About fujimobile repair Shop Group | Shop for Business | Send E-Gift Vouchers<br>Tips for You | Recipes
+            </p>
         </footer>
     </div>
 
@@ -389,7 +404,7 @@
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-        
+
 
 
         const carouselImages = [
@@ -784,6 +799,24 @@
         updateCartDisplay();
         updateCustomerInfoDisplay();
 
+    </script>
+
+    <script>
+        document.getElementById("askSend").addEventListener("click", function () {
+
+            const phone = "8562098614336"; // whatsapp เบอร์คุณ
+            const img = document.getElementById("askImage").value.trim();
+            const txt = document.getElementById("askText").value.trim();
+
+            let message =
+                `ຂໍຂໍ້ມູນສິນຄ້າເພີ່ມເຕີມ หน่อยคับ
+ລາຍລະອຽດ: ${txt}
+ຮູບ : ${img}`;
+
+            const url = "https://api.whatsapp.com/send?phone=" + phone + "&text=" + encodeURIComponent(message);
+
+            window.open(url, "_blank");
+        });
     </script>
 </body>
 
