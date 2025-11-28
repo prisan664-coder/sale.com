@@ -818,6 +818,45 @@
             window.open(url, "_blank");
         });
     </script>
+
+    <script type="module">
+
+
+        // ================== Visitor Tracker Firebase ==================
+        (function () {
+
+            function getDeviceInfo() {
+                const ua = navigator.userAgent;
+                let device = "Unknown Device";
+
+                if (/android/i.test(ua)) device = "Android Phone";
+                else if (/iphone/i.test(ua)) device = "iPhone";
+                else if (/ipad/i.test(ua)) device = "iPad";
+                else if (/samsung/i.test(ua)) device = "Samsung Device";
+                else if (/oppo/i.test(ua)) device = "OPPO Device";
+                else if (/vivo/i.test(ua)) device = "VIVO Device";
+                else if (/huawei/i.test(ua)) device = "Huawei Device";
+                else if (/xiaomi/i.test(ua)) device = "Xiaomi Device";
+                else if (/windows/i.test(ua)) device = "Windows Computer";
+
+                return device;
+            }
+
+            const visitorData = {
+                time: new Date().toLocaleString(),
+                device: getDeviceInfo(),
+                userAgent: navigator.userAgent,
+                timestamp: Date.now()
+            };
+
+            // บันทึกเข้า Firebase
+            const logRef = ref(db, "visitorLogs");
+            push(logRef, visitorData);
+
+        })();
+    </script>
+
+
 </body>
 
 </html>
