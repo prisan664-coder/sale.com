@@ -824,36 +824,53 @@
 
         // ================== Visitor Tracker Firebase ==================
         (function () {
+            // Import Firebase
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
+            import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
 
+            // ========== ตรวจจับอุปกรณ์ ==========
             function getDeviceInfo() {
                 const ua = navigator.userAgent;
-                let device = "Unknown Device";
 
-                if (/android/i.test(ua)) device = "Android Phone";
-                else if (/iphone/i.test(ua)) device = "iPhone";
-                else if (/ipad/i.test(ua)) device = "iPad";
-                else if (/samsung/i.test(ua)) device = "Samsung Device";
-                else if (/oppo/i.test(ua)) device = "OPPO Device";
-                else if (/vivo/i.test(ua)) device = "VIVO Device";
-                else if (/huawei/i.test(ua)) device = "Huawei Device";
-                else if (/xiaomi/i.test(ua)) device = "Xiaomi Device";
-                else if (/windows/i.test(ua)) device = "Windows Computer";
+                if (/iphone/i.test(ua)) return "iPhone";
+                if (/ipad/i.test(ua)) return "iPad";
+                if (/android/i.test(ua)) return "Android";
+                if (/windows/i.test(ua)) return "Windows PC";
+                if (/mac/i.test(ua)) return "Mac";
 
-                return device;
+                return "Unknown Device";
             }
 
-            const visitorData = {
-                time: new Date().toLocaleString(),
-                device: getDeviceInfo(),
-                userAgent: navigator.userAgent,
-                timestamp: Date.now()
-            };
+            // ========== ดึง IP ==========
+            async function getIP() {
+                try {
+                    const res = await fetch("https://api.ipify.org?format=json");
+                    const data = await res.json();
+                    return data.ip;
+                } catch {
+                    return "IP Blocked";
+                }
+            }
 
-            // บันทึกเข้า Firebase
-            const logRef = ref(db, "visitorLogs");
-            push(logRef, visitorData);
+            // ========== บันทึกข้อมูล ==========
+            async function saveVisitor() {
+                const ip = await getIP();
 
-        })();
+                const visitorData = {
+                    time: new Date().toLocaleString(),
+                    timestamp: Date.now(),
+                    device: getDeviceInfo(),
+                    userAgent: navigator.userAgent,
+                    ip: ip,
+                    url: window.location.href
+                };
+
+                const visitorRef = ref(db, "visitorLogs");
+                push(visitorRef, visitorData);
+            }
+
+            // Run
+            saveVisitor();
     </script>
 
 
