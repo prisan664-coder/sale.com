@@ -185,6 +185,48 @@
             padding-bottom: 5px;
             margin-bottom: 5px;
         }
+
+        /* Comment system styles */
+        body.comment-system {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        .comment-box {
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            background: #f5f5f5;
+        }
+
+        .actions button {
+            margin-right: 5px;
+            padding: 3px 8px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .delete-btn {
+            background: red;
+            color: white;
+        }
+
+        .edit-btn {
+            background: green;
+            color: white;
+        }
+
+        .reply-btn {
+            background: #007bff;
+            color: white;
+        }
+
+        .reply-box {
+            padding-left: 30px;
+            margin-top: 10px;
+            border-left: 2px solid #ccc;
+        }
     </style>
 </head>
 
@@ -237,7 +279,7 @@
         <div class="help-btn">
             <img src="https://as1.ftcdn.net/jpg/00/07/32/48/1000_F_7324864_FXazuBCI3dQBwIWY7gaWQzXskXJaTbrY.jpg"
                 alt="Admin">
-            <a href="Firebase.html">ຕ້ອງການສອບຖາມຫຼືບໍລິການໃດ ກົດທີນີ້ຫາແອັດມິນໄດ້</a>
+            <a href="Firebase.html">ຕ້ອງການສອບຖາມ / ບໍລິການໃດ ກົດທີ່ນີ້</a>
         </div>
 
         <!-- User Ask / Help Products -->
@@ -247,7 +289,7 @@
                 <input type="text" id="askImage" class="form-control mb-2"
                     placeholder="ທັກຫາແອດມິນທາງ Whatsapp ເພື່ອຄວາມວ່ອງໄວ">
                 <textarea id="askText" class="form-control mb-2" rows="2"
-                    placeholder="ພິມລາຍລະອຽດທີຕ້ອງສອບຖາມເຊັ່ນ ລາຄາ ຂໍລິວິວສິນຄ້າ ສົນໃຈ"></textarea>
+                    placeholder="ພິມລາຍລະອຽດທີຕ້ອງສອບຖາມເຊັ່ນ ລາຄາ ຂໍລາຍລະອຽດ ສົນໃຈ"></textarea>
                 <button id="askSend" class="btn btn-primary w-100">ສົ່ງຂໍ້ຄວາມທາງ Whatsapp</button>
             </div>
         </div>
@@ -269,12 +311,32 @@
         <h4>ໂທລະສັບມືຫນື່ງ</h4>
         <div class="row mb-4" id="welcome-products-row"></div>
 
+        <!-- ========================================== -->
+        <!-- comment system -->
+        <!-- ========================================== -->
+        <h2>💬 ລະບົບຄວາມຄິດເຫັນ</h2>
+
+        <div class="mb-3">
+            <input id="nameInput" type="text" placeholder="ພິມຊື່" class="form-control mb-2">
+            <textarea id="commentInput" placeholder="ປ້ອນຄວາມຄິດເຫັນ" class="form-control mb-2" rows="3"></textarea>
+            <button id="sendCommentBtn" class="btn btn-primary">ກົດສົ່ງ</button>
+        </div>
+
+        <hr>
+
+        <h3>📌 ຄວາມຄິດເຫັນທັງໝົດ</h3>
+        <div id="commentList"></div>
+
+        <!-- ========================================== -->
         <footer class="py-3 text-center">
             <p>About fujimobile repair Shop Group | Shop for Business | Send E-Gift Vouchers<br>Tips for You | Recipes
             </p>
         </footer>
     </div>
 
+    <!-- ========================================== -->
+    <!-- cart modal -->
+    <!-- ========================================== -->
     <div class="modal fade" id="cartModal" tabindex="-1" aria-labelledby="cartModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
@@ -291,7 +353,7 @@
 
                 <h7 class="center">
                     ທຸກຄັ້ງໃຫ້ຊຳລະກັບແອດມິນເທົ່ານັ້ນ ນອກຈາກລາຍກັນທີເກັບເງິນປາຍທາງ <br>
-                    ເມື່ອທ່ານກດສັ່ງຊື້ແລ້ວຈະມີແອດມິນທັກຫາທາງ Whatsapp
+                    ເມື່ອທ່ານກົດສັ່ງຊື້ແລ້ວຈະມີແອດມິນທັກຫາທາງ Whatsapp
                 </h7>
 
                 <div class="modal-body">
@@ -303,7 +365,7 @@
                 </div>
                 <div class="modal-footer d-flex justify-content-between">
                     <div class="fw-bold">
-                        ລາຄາລວມທັ້ງຫມົດ: <span id="cartTotal">0 ₭</span>
+                        ລາຄາລວມທັງຫມົດ: <span id="cartTotal">0 ₭</span>
                     </div>
                     <div>
                         <button type="button" class="btn btn-sm btn-outline-danger"
@@ -315,18 +377,21 @@
         </div>
     </div>
 
+    <!-- ========================================== -->
+    <!-- customer info modal -->
+    <!-- ========================================== -->
     <div class="modal fade" id="customerInfoModal" tabindex="-1" aria-labelledby="customerInfoModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="customerInfoModalLabel">📝ຂໍ້ມູມສຳລັບຈັດສົ່ງ ກະລຸນາປ້ອນຂໍ້ມູມທີຖືກຕ້ອງ
+                    <h5 class="modal-title" id="customerInfoModalLabel">📝ຂໍ້ມູນສຳລັບຈັດສົ່ງ ກະລຸນາປ້ອນຂໍ້ມູນທີຖືກຕ້ອງ
                     </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div id="customerInfoDisplay" style="display: none;">
-                        <h6>ຂໍ້ມູມທີລູກຄ້າບັນທຶກໄວ້:</h6>
+                        <h6>ຂໍ້ມູນທີ່ລູກຄ້າບັນທຶກໄວ້:</h6>
                         <p class="mb-1">**ຊື່ແລະນາມສະກຸມ:** <span id="display-name"></span>
                             <button class="btn btn-link btn-sm p-0 ms-2" onclick="editCustomerInfo()">(แก้ไข)</button>
                         </p>
@@ -380,17 +445,19 @@
         </div>
     </div>
 
-
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- ========================================== -->
+    <!-- Firebase + Main JS -->
+    <!-- ========================================== -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-app.js";
-        // Import update และ set สำหรับการอัปเดตหรือกำหนดข้อมูล
-        import { getDatabase, ref as dbRef, onValue, push, set } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
+        import { getDatabase, ref as dbRef, onValue, push, set, update, remove } from "https://www.gstatic.com/firebasejs/10.13.0/firebase-database.js";
 
         // *******************************************************************
-        // ** ส่วนแก้ไขและเพิ่มเติม JavaScript **
+        // ** Firebase config
         // *******************************************************************
-
         const firebaseConfig = {
             apiKey: "AIzaSyCLXIs8EaJNauHJpcnDMKU99C-uBKKR0aU",
             authDomain: "my-bank-87108.firebaseapp.com",
@@ -398,24 +465,23 @@
             projectId: "my-bank-87108",
             storageBucket: "my-bank-87108.appspot.com",
             messagingSenderId: "692654082797",
-            appId: "1:692654082797:web:3b5f9912900a8cb5409ae4"
+            appId: "1:692654082797:web:3b5f9912909ae4"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getDatabase(app);
 
-
-
-
+        // *******************************************************************
+        // ** Carousel
+        // *******************************************************************
         const carouselImages = [
-            "https://scontent.fvte5-1.fna.fbcdn.net/v/t39.30808-6/511156933_122112403952900284_7445255279904740194_n.png?_nc_cat=110&ccb=1-7&_nc_sid=cc71e4&_nc_ohc=dqIsIg3JU-AQ7kNvwHDabd5&_nc_oc=AdknckkR7d8VB8kymWbig6nyfJ9WThM2DHCvGb5AFO2IHXQT4oHbeYBTeXqHfv8083M&_nc_zt=23&_nc_ht=scontent.fvte5-1.fna&_nc_gid=ipQMxHoN1Nc5I7zWth788Q&oh=00_AfgwsEACDbRIOzTP3cLP_hBVdU7MaJxsxkJ2WBcnJWvsBA&oe=692D612E",
-            "https://scontent.fvte5-1.fna.fbcdn.net/v/t39.30808-6/514646010_4097229920536732_2439041800811875889_n.jpg?_nc_cat=110&ccb=1-7&_nc_sid=86c6b0&_nc_ohc=DHk7zIKZKycQ7kNvwEmXIMX&_nc_oc=AdndqZDUeLTIdjANUefV749Xq-kIlXeIVlT-hCwJnHkbz_Cz1XOTod9sG9cVVzVy4mY&_nc_zt=23&_nc_ht=scontent.fvte5-1.fna&_nc_gid=Ppz09sNre_LEOJBR7dfPEg&oh=00_Afji0Kf5Y4qK8imxfiBQgm7J_6Hv7yAqSXDO9gQbgcYqxQ&oe=692D7DE3",
-            "https://scontent.fvte3-1.fna.fbcdn.net/v/t39.30808-6/585893796_122141379200900284_6328156473185626830_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=105&ccb=1-7&_nc_sid=833d8c&_nc_ohc=pjzVAqj1GCoQ7kNvwGcCGB4&_nc_oc=Adm2f8ohxpavLP3eYDH2ggaBZ0GPcaAOp089NGU6Ee2Bv1Ms5qIN37gSNhZTjgTfagw&_nc_zt=23&_nc_ht=scontent.fvte3-1.fna&_nc_gid=j-FWVlCn-TmYuMw_-IwSKA&oh=00_AfhMZtUWxxrhk0QMyi11_0Ac-iIL5X0r2pvKLBxZ6CXMFQ&oe=692D8299",
-            "https://scontent.fvte1-2.fna.fbcdn.net/v/t39.30808-6/570344439_122137026026900284_7647926302248433610_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=108&ccb=1-7&_nc_sid=833d8c&_nc_ohc=FBXP_MK3Mv4Q7kNvwF3Hz_q&_nc_oc=Admxy-raEUMgnrXcYYBl_mwmxDAA2ulb6aMACTFbuUTfiuw0-NAlcUl-xvSxvg1p6qM&_nc_zt=23&_nc_ht=scontent.fvte1-2.fna&_nc_gid=T8QRpFKKcBzztABBT-vAZQ&oh=00_Afj4YxNzPV7TfrKmh9-TO0fj7ASYMUtE_D5AkMv1VIZ-Tg&oe=692D731F",
-            "https://scontent.fvte1-2.fna.fbcdn.net/v/t39.30808-6/552770795_122131662908900284_8993875853961034449_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=111&ccb=1-7&_nc_sid=833d8c&_nc_ohc=QhSAVw6mZooQ7kNvwF4ajiX&_nc_oc=AdkWf_2eewH--nOxLN7Yv-UTFQr8rERdMQpXzvwNHgUnCM_LlhuJBkixmGYxSH5qgZw&_nc_zt=23&_nc_ht=scontent.fvte1-2.fna&_nc_gid=3ieqULaQYwfrZVs9-bDMEQ&oh=00_AfjN7nPRt0FKztzs0-CdDZv_PF0SHjm-rZ0PgrSy5BR-Vw&oe=692D64A6",
-            "https://fdn2.gsmarena.com/vv/pics/apple/apple-iphone-14-pro-4.jpg",
-            "https://media.elwatannews.com/media/img/mediaarc/medium/20391099881660810781.jpg"
-
+            "https://scontent.fvte1-1.fna.fbcdn.net/v/t39.30808-6/518825433_122117695760900284_354744809560286503_n.jpg?_nc_cat=102&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=MKrqzHZlaooQ7kNvwEHhZ0w&_nc_oc=AdnPo34dhxq2GmMuhc-VA55QxG6aGQv5My9zAjwbLIstQ2iJOcP58NbatriUmsk7tHw&_nc_zt=23&_nc_ht=scontent.fvte1-1.fna&_nc_gid=h54egvksbujQOfwv1eNVSA&oh=00_Afi253Qqx8pFNBt-978qMJsErDJMBTD7TS1uHivAiQxkxg&oe=69317656",
+            "https://scontent.fvte1-2.fna.fbcdn.net/v/t39.30808-6/586893306_122140940228900284_26111276145886_n.jpg?stp=cp6_dst-jpg_tt6&_nc_cat=101&ccb=1-7&_nc_sid=833d8c&_nc_ohc=IpvT14aSaT4Q7kNvwE6ArNn&_nc_oc=Adma6ja--Y0pN_IhgNApRCHVdhThWAWernXfbLSYxrx_v2j-gMGqLqwrTAEk5nnmzkU&_nc_zt=23&_nc_ht=scontent.fvte1-2.fna&_nc_gid=UXjuf_FEIhsDchwiWspLXA&oh=00_Afg43zFc9upJfVzw5FPyc4Xu1qFk4A3HSCKdWM-v5ZejFg&oe=6931835B",
+            "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2b/e5/e0/35/caption.jpg?w=900&h=500&s=1",
+            "https://mobilelab.co.uk/cdn/shop/files/14993a4a-f4ca-4478-a74a-d69378e490b5.jpg?v=1741344236&width=1420",
+            "https://www.superudisplay.com/wp-content/uploads/2022/10/gr-phones-mobile-shop-thumbnail.jpg",
+            "https://rechiretail.com/wp-content/uploads/2020/05/Mobile-Phone-Store-Fixtures-1-2.jpg",
+            "https://s3.ap-southeast-1.amazonaws.com/dlg.dialog.lk/s3fs-public/2023-10/shop-phone-mob.jpg"
         ];
 
         const carouselInner = document.getElementById("carousel-inner");
@@ -429,6 +495,9 @@
             carouselInner.appendChild(div);
         });
 
+        // *******************************************************************
+        // ** Analytics tracker helper
+        // *******************************************************************
         function trackEvent(eventType, data) {
             push(dbRef(db, 'analytics/' + eventType), {
                 ...data,
@@ -439,14 +508,13 @@
         trackEvent('page_view', { page: 'index' });
 
         // *******************************************************************
-        // ** ระบบข้อมูลลูกค้า (Customer Info System) **
+        // ** Customer Info System
         // *******************************************************************
         let customerInfo = JSON.parse(localStorage.getItem('fuji_mobile_customer_info')) || null;
         const customerInfoForm = document.getElementById('customerInfoForm');
         const customerInfoModal = new bootstrap.Modal(document.getElementById('customerInfoModal'));
         const finalOrderBtn = document.getElementById('finalOrderBtn');
-        const cartModal = document.getElementById('cartModal');
-
+        const cartModalEl = document.getElementById('cartModal');
 
         function updateCustomerInfoDisplay() {
             const displayDiv = document.getElementById('customerInfoDisplay');
@@ -520,9 +588,8 @@
             submitOrder();
         });
 
-        // Helper function to format price as Kip (e.g., "120,000 ₭")
+        // Helper function to format price as Kip
         function formatPriceLAK(amount) {
-            // Use Lao Kip symbol: ₭ (U+20AD) or kip
             return new Intl.NumberFormat('lo-LA', {
                 style: 'currency',
                 currency: 'LAK',
@@ -533,7 +600,6 @@
 
         // Helper function to parse price string to number
         function parsePriceLAK(priceString) {
-            // Assumes the stored price is a string like "120000" or has only numbers
             const num = parseFloat(priceString.toString().replace(/[^0-9.]/g, ''));
             return isNaN(num) ? 0 : num;
         }
@@ -544,33 +610,30 @@
                 return;
             }
 
-            // คำนวณยอดรวม (ใช้ parsePriceLAK เพื่อแปลง string price เป็น number)
             let total = cart.reduce((sum, item) => {
-                const price = parsePriceLAK(item.price); // ใช้ parsePriceLAK เพื่อให้ได้ตัวเลข
+                const price = parsePriceLAK(item.price);
                 return sum + (price * item.quantity);
             }, 0);
 
             const orderData = {
                 customer: customerInfo,
                 items: cart,
-                total: total, // เก็บเป็นตัวเลข
-                status: 'New Order', // สถานะเริ่มต้น
+                total: total,
+                status: 'New Order',
                 orderDate: new Date().toISOString()
             };
 
             try {
-                // ส่งข้อมูลคำสั่งซื้อไปที่ Firebase ภายใต้ 'orders'
                 const newOrderRef = await push(dbRef(db, 'orders'), orderData);
 
-                // ล้างตะกร้าสินค้า
                 cart = [];
                 localStorage.removeItem('fuji_mobile_cart');
                 updateCartDisplay();
 
                 // ปิด Modal
-                customerInfoModal.hide();
+                const modalInst = bootstrap.Modal.getInstance(document.getElementById('customerInfoModal'));
+                if (modalInst) modalInst.hide();
 
-                // แจ้งเตือนลูกค้า
                 alert(`ສັ່ງຊື້ສິນຄ້າສຳເລັດແລ້ວ! ຂໍຂອບໃຈທ່ານ ${customerInfo.fullName} \nເລກທີຄຳສັ່ງຊື້: ${newOrderRef.key}\nລາຍການທັງໝົດ: ${formatPriceLAK(total)}.\nແອັດມິນຈະຕິດຕໍ່ກັບທ່ານໄວໆນີ້.\n\nກະລຸນາໄປທີ່ Admin2.html ເພື່ອເບິ່ງລາຍການສັ່ງຊື້.`);
                 trackEvent('order_placed', { orderId: newOrderRef.key, total: total });
 
@@ -581,7 +644,7 @@
         }
 
         // ** 1. ระบบตะกร้าสินค้า (Cart System) **
-        let cart = JSON.parse(localStorage.getItem('fuji_mobile_cart')) || []; // โหลดตะกร้าจาก LocalStorage
+        let cart = JSON.parse(localStorage.getItem('fuji_mobile_cart')) || [];
         const cartCountElement = document.getElementById('cart-count');
         const cartItemsElement = document.getElementById('cartItems');
         const cartTotalElement = document.getElementById('cartTotal');
@@ -596,12 +659,11 @@
 
             if (cart.length === 0) {
                 emptyCartMessage.style.display = 'block';
-                checkoutBtn.disabled = true; // ปิดปุ่มสั่งซื้อถ้าตะกร้าว่าง
+                checkoutBtn.disabled = true;
             } else {
                 emptyCartMessage.style.display = 'none';
-                checkoutBtn.disabled = false; // เปิดปุ่มสั่งซื้อ
+                checkoutBtn.disabled = false;
                 cart.forEach((item, index) => {
-                    // ** NEW: ใช้ parsePriceLAK และ formatPriceLAK **
                     const price = parsePriceLAK(item.price);
                     total += price * item.quantity;
 
@@ -622,15 +684,12 @@
                 });
             }
 
-            // ** NEW: แสดงยอดรวมเป็นสกุลเงินกีบที่ถูกต้อง **
             cartTotalElement.textContent = formatPriceLAK(total);
-            localStorage.setItem('fuji_mobile_cart', JSON.stringify(cart)); // บันทึกตะกร้าลง LocalStorage
+            localStorage.setItem('fuji_mobile_cart', JSON.stringify(cart));
         }
 
         window.addToCart = (product) => {
             const existingItem = cart.find(item => item.name === product.name);
-
-            // ** NEW: ตรวจสอบและแปลง price ให้เป็น string ธรรมดา (ตัวเลข) ก่อนเก็บใน cart **
             const cleanPrice = parsePriceLAK(product.price).toString();
             const productToCart = { name: product.name, price: cleanPrice };
 
@@ -675,24 +734,22 @@
             }
 
             // ปิด Cart Modal
-            const cartModalInstance = bootstrap.Modal.getInstance(cartModal);
+            const cartModalInstance = bootstrap.Modal.getInstance(cartModalEl);
             if (cartModalInstance) cartModalInstance.hide();
 
             // เตรียมและเปิด Customer Info Modal
-            updateCustomerInfoDisplay(); // แสดงข้อมูลที่บันทึกไว้หรือฟอร์มเปล่า
+            updateCustomerInfoDisplay();
             customerInfoModal.show();
 
             trackEvent('checkout_click', { item_count: cart.length });
         });
 
-        // ** 2. ฟังก์ชันหลักในการแสดงสินค้า (พร้อมแก้ไขระบบ Countdown) **
-        // --- ส่วนที่ 1: ระบบจัดการเวลาเริ่มต้น Countdown ใน Local Storage ---
+        // ** 2. Countdown system **
         const countdownStartsKey = 'fuji_mobile_countdown_starts';
         let countdownStarts = JSON.parse(localStorage.getItem(countdownStartsKey)) || {};
-        const DURATION_MS = 24 * 60 * 60 * 1000; // 24 ชั่วโมงในหน่วยมิลลิวินาที
+        const DURATION_MS = 24 * 60 * 60 * 1000;
 
         function getStartTimestamp(key) {
-            // ถ้าไม่มีเวลาเริ่มต้น หรือหมดเวลาแล้ว (หมดอายุ 24 ชม. + 1 นาทีเผื่อความคลาดเคลื่อน)
             if (!countdownStarts[key] || (Date.now() - countdownStarts[key] > DURATION_MS + 60000)) {
                 const newStartTime = Date.now();
                 countdownStarts[key] = newStartTime;
@@ -702,7 +759,6 @@
             return countdownStarts[key];
         }
 
-        // --- ส่วนที่ 2: ฟังก์ชันนับถอยหลังที่เรียกใช้ซ้ำ ---
         function updateCountdown(key, element) {
             const startTime = getStartTimestamp(key);
             const endTime = startTime + DURATION_MS;
@@ -711,7 +767,6 @@
 
             if (distance < 0) {
                 element.textContent = "ໂປຣໂມຊັ່ນຫມົດອາຍຸແລ້ວ";
-                // ลบเวลาเริ่มต้นออกจาก Local Storage เพื่อให้เริ่มนับใหม่เมื่อโหลดหน้าจอครั้งต่อไป
                 delete countdownStarts[key];
                 localStorage.setItem(countdownStartsKey, JSON.stringify(countdownStarts));
                 return;
@@ -721,7 +776,6 @@
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            // แสดงผล 2 หลัก
             const displayHours = String(hours).padStart(2, '0');
             const displayMinutes = String(minutes).padStart(2, '0');
             const displaySeconds = String(seconds).padStart(2, '0');
@@ -729,16 +783,13 @@
             element.textContent = `⏰ ເວລານັບຖອຍຫລັງ: ${displayHours}:${displayMinutes}:${displaySeconds}`;
         }
 
-        // เก็บ Interval ID สำหรับล้างเมื่อไม่จำเป็น
         const countdownIntervals = {};
 
-        // --- ส่วนที่ 3: ฟังก์ชันหลักในการแสดงสินค้า (ปรับปรุง buy-btn) ---
         function renderProducts(category, containerId, limit = 0) {
             const container = document.getElementById(containerId);
             onValue(dbRef(db, 'products/' + category), (snapshot) => {
                 const data = snapshot.val() || {};
                 container.innerHTML = '';
-                // ล้าง Interval เก่าก่อนสร้างใหม่
                 Object.values(countdownIntervals).forEach(clearInterval);
 
                 const keys = Object.keys(data);
@@ -746,12 +797,9 @@
 
                 useKeys.forEach((key, index) => {
                     const p = data[key];
-                    // ** NEW: แปลงราคาเป็น Kip ก่อนแสดงผล (ใช้ parsePriceLAK และ formatPriceLAK) **
                     const displayPrice = formatPriceLAK(parsePriceLAK(p.price));
-                    // ** เก็บราคาเป็นตัวเลข (string) ใน data-product เพื่อคำนวณในตะกร้าได้ง่ายขึ้น **
                     const productDataForCart = JSON.stringify({ name: p.name, price: parsePriceLAK(p.price).toString() });
 
-                    // ใช้ product key เป็นตัวระบุเฉพาะสำหรับ Local Storage
                     const countdownKey = `${category}-${key}`;
 
                     const col = document.createElement('div');
@@ -774,13 +822,8 @@
                     `;
                     container.appendChild(col);
 
-                    // ** NEW: เริ่ม Countdown Timer และเก็บ Interval ID **
                     const countdownElement = document.getElementById(`countdown-${countdownKey}`);
-
-                    // เรียกใช้งานครั้งแรกเพื่อแสดงผลทันที
                     updateCountdown(countdownKey, countdownElement);
-
-                    // ตั้งค่าให้รันทุกวินาที
                     countdownIntervals[countdownKey] = setInterval(() => {
                         updateCountdown(countdownKey, countdownElement);
                     }, 1000);
@@ -788,23 +831,110 @@
             });
         }
 
-        // ** 3. การโหลดข้อมูลสินค้าและการแสดงผล **
+        // ** 3. Load products **
         renderProducts('cases', 'cases-row');
         renderProducts('bestSeller', 'best-seller-row');
         renderProducts('cables', 'cables-row');
         renderProducts('phones', 'phones-row');
         renderProducts('welcomeProducts', 'welcome-products-row');
 
-        // Initial calls
         updateCartDisplay();
         updateCustomerInfoDisplay();
 
-    </script>
+        // *******************************************************************
+        // ** Comment system
+        // *******************************************************************
+        const commentRef = dbRef(db, "comments");
 
-    <script>
+        const nameInput = document.getElementById("nameInput");
+        const commentInput = document.getElementById("commentInput");
+        const sendCommentBtn = document.getElementById("sendCommentBtn");
+        const commentList = document.getElementById("commentList");
+
+        sendCommentBtn.addEventListener("click", postComment);
+
+        function postComment() {
+            const name = nameInput.value.trim();
+            const comment = commentInput.value.trim();
+
+            if (!name || !comment) {
+                alert("โปรดใส่ชื่อและความคิดเห็นก่อนส่ง");
+                return;
+            }
+
+            push(commentRef, {
+                name: name,
+                comment: comment,
+                reply: "",
+                time: Date.now()
+            }).then(() => {
+                commentInput.value = "";
+                trackEvent('post_comment', { name: name });
+            }).catch((err) => {
+                console.error("Error posting comment:", err);
+            });
+        }
+
+        // โหลดความคิดเห็นทั้งหมดแบบ realtime
+        onValue(commentRef, (snapshot) => {
+            const data = snapshot.val() || {};
+            commentList.innerHTML = "";
+
+            for (let id in data) {
+                const item = data[id];
+
+                const div = document.createElement("div");
+                div.className = "comment-box";
+                div.innerHTML = `
+                    <b>${item.name}</b><br>
+                    <p>${item.comment}</p>
+
+                    <div class="actions">
+                        <button class="edit-btn" onclick="editComment('${id}', '${encodeURIComponent(item.comment)}')">แก้ไข</button>
+                        <button class="delete-btn" onclick="deleteComment('${id}')">ลบ</button>
+                        <button class="reply-btn" onclick="replyComment('${id}')">ตอบกลับ</button>
+                    </div>
+
+                    ${item.reply ? `<div class='reply-box'>💬 <b>Reply:</b> ${item.reply}</div>` : ""}
+                `;
+
+                commentList.appendChild(div);
+            }
+        });
+
+        // ลบความคิดเห็น
+        window.deleteComment = function (id) {
+            remove(dbRef(db, "comments/" + id)).then(() => {
+                trackEvent('delete_comment', { id });
+            });
+        };
+
+        // แก้ไขข้อความ
+        window.editComment = function (id, oldTextEncoded) {
+            const oldText = decodeURIComponent(oldTextEncoded);
+            const newText = prompt("แก้ไขความคิดเห็น:", oldText);
+            if (newText !== null) {
+                update(dbRef(db, "comments/" + id), { comment: newText }).then(() => {
+                    trackEvent('edit_comment', { id });
+                });
+            }
+        };
+
+        // ตอบกลับ
+        window.replyComment = function (id) {
+            const reply = prompt("พิมพ์คำตอบกลับ:");
+            if (reply !== null) {
+                update(dbRef(db, "comments/" + id), { reply: reply }).then(() => {
+                    trackEvent('reply_comment', { id });
+                });
+            }
+        };
+
+        // *******************************************************************
+        // ** Ask via Whatsapp
+        // *******************************************************************
         document.getElementById("askSend").addEventListener("click", function () {
-
-            const phone = "8562098614336"; // whatsapp เบอร์คุณ
+            const phone = "8562098614336";
             const img = document.getElementById("askImage").value.trim();
             const txt = document.getElementById("askText").value.trim();
 
@@ -817,31 +947,22 @@
 
             window.open(url, "_blank");
         });
-    </script>
 
-    <script type="module">
-
-
-        // ================== Visitor Tracker Firebase ==================
+        // *******************************************************************
+        // ** Visitor Tracker Firebase
+        // *******************************************************************
         (function () {
-            // Import Firebase
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-app.js";
-            import { getDatabase, ref, push } from "https://www.gstatic.com/firebasejs/9.23.0/firebase-database.js";
-
-            // ========== ตรวจจับอุปกรณ์ ==========
-            function getDeviceInfo() {
-                const ua = navigator.userAgent;
-
-                if (/iphone/i.test(ua)) return "iPhone";
-                if (/ipad/i.test(ua)) return "iPad";
-                if (/android/i.test(ua)) return "Android";
-                if (/windows/i.test(ua)) return "Windows PC";
-                if (/mac/i.test(ua)) return "Mac";
-
+            // ตรวจจับอุปกรณ์
+            function getDevice() {
+                const ua = navigator.userAgent.toLowerCase();
+                if (ua.includes("iphone")) return "iPhone";
+                if (ua.includes("android")) return "Android Phone";
+                if (ua.includes("windows")) return "Windows Computer";
+                if (ua.includes("mac")) return "Mac Computer";
                 return "Unknown Device";
             }
 
-            // ========== ดึง IP ==========
+            // ดึง IP ผู้ใช้
             async function getIP() {
                 try {
                     const res = await fetch("https://api.ipify.org?format=json");
@@ -852,27 +973,25 @@
                 }
             }
 
-            // ========== บันทึกข้อมูล ==========
+            // บันทึกเข้า Firebase
             async function saveVisitor() {
                 const ip = await getIP();
 
-                const visitorData = {
+                const data = {
                     time: new Date().toLocaleString(),
-                    timestamp: Date.now(),
-                    device: getDeviceInfo(),
-                    userAgent: navigator.userAgent,
+                    device: getDevice(),
                     ip: ip,
-                    url: window.location.href
+                    url: window.location.href,
+                    userAgent: navigator.userAgent
                 };
 
-                const visitorRef = ref(db, "visitorLogs");
-                push(visitorRef, visitorData);
+                await push(dbRef(db, "visitorLogs"), data);
             }
 
-            // Run
             saveVisitor();
-    </script>
+        })();
 
+    </script>
 
 </body>
 
